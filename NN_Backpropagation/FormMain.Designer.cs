@@ -1,6 +1,6 @@
 ﻿namespace NN_Backpropagation
 {
-    partial class MainForm
+    partial class FormMain
     {
         /// <summary>
         /// Обязательная переменная конструктора.
@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.ControlPanel = new System.Windows.Forms.Panel();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.InfoPanel = new System.Windows.Forms.Panel();
             this.Rtb_Result = new System.Windows.Forms.RichTextBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.ControlPanel.SuspendLayout();
             this.InfoPanel.SuspendLayout();
             this.SuspendLayout();
@@ -46,6 +46,25 @@
             this.ControlPanel.Name = "ControlPanel";
             this.ControlPanel.Size = new System.Drawing.Size(275, 450);
             this.ControlPanel.TabIndex = 0;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(54, 87);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(167, 50);
+            this.button2.TabIndex = 1;
+            this.button2.Text = "button2";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(54, 12);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(167, 47);
+            this.button1.TabIndex = 0;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // InfoPanel
             // 
@@ -65,25 +84,7 @@
             this.Rtb_Result.TabIndex = 0;
             this.Rtb_Result.Text = "";
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(54, 12);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(167, 47);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(54, 87);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(167, 50);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // MainForm
+            // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -91,7 +92,7 @@
             this.Controls.Add(this.InfoPanel);
             this.Controls.Add(this.ControlPanel);
             this.MinimumSize = new System.Drawing.Size(500, 200);
-            this.Name = "MainForm";
+            this.Name = "FormMain";
             this.Text = "Нейронная сеть - Обратное распространение ошибки";
             this.ControlPanel.ResumeLayout(false);
             this.InfoPanel.ResumeLayout(false);
