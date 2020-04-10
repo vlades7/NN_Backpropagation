@@ -99,8 +99,9 @@ namespace NN_Backpropagation.Classes
                 double e = L[last].z[i] - output[i]; // Находим разность значений векторов
 
                 deltas[last][i] = e * L[last].df[i]; // Запоминаем дельту
-                error += e * e / 2; // Прибавляем к ошибке половину квадрата значения
+                error += e * e; // Расчет ошибки по MSE (Mean Squared Error)
             }
+            error /= output.length;
 
             // Вычисляем каждую предыдущую дельту на основе текущей с помощью умножения на транспонированную матрицу
             for (int k = last; k > 0; k--)
@@ -147,7 +148,7 @@ namespace NN_Backpropagation.Classes
                     Backward(Y[i], ref error); // Обратное распространение ошибки
                     UpdateWeights(alpha); // Обновление весовых коэффициентов
                 }
-                Console.WriteLine("epoch: {0}, error: {1}", epoch, error); // Выводим в консоль номер эпохи и величину ошибку
+                Console.WriteLine("Epoch: {0}, error: {1}", epoch, error); // Выводим в консоль номер эпохи и величину ошибку
                 epoch++;
             } while (epoch <= epochs && error > eps);
         }
