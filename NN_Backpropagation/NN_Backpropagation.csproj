@@ -48,6 +48,9 @@
   <ItemGroup>
     <Compile Include="Classes\Const.cs" />
     <Compile Include="Classes\FileExcel.cs" />
+    <Compile Include="Classes\Neural Network\Matrix.cs" />
+    <Compile Include="Classes\Neural Network\Network.cs" />
+    <Compile Include="Classes\Neural Network\Vector.cs" />
     <Compile Include="Classes\Utilities.cs" />
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
