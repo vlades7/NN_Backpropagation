@@ -33,14 +33,14 @@
             this.button1 = new System.Windows.Forms.Button();
             this.InfoPanel = new System.Windows.Forms.Panel();
             this.Rtb_Result = new System.Windows.Forms.RichTextBox();
-            this.TEST = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             this.ControlPanel.SuspendLayout();
             this.InfoPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // ControlPanel
             // 
-            this.ControlPanel.Controls.Add(this.TEST);
+            this.ControlPanel.Controls.Add(this.button3);
             this.ControlPanel.Controls.Add(this.button2);
             this.ControlPanel.Controls.Add(this.button1);
             this.ControlPanel.Dock = System.Windows.Forms.DockStyle.Right;
@@ -87,15 +87,15 @@
             this.Rtb_Result.TabIndex = 0;
             this.Rtb_Result.Text = "";
             // 
-            // TEST
+            // button3
             // 
-            this.TEST.Location = new System.Drawing.Point(54, 184);
-            this.TEST.Name = "TEST";
-            this.TEST.Size = new System.Drawing.Size(167, 123);
-            this.TEST.TabIndex = 2;
-            this.TEST.Text = "button3";
-            this.TEST.UseVisualStyleBackColor = true;
-            this.TEST.Click += new System.EventHandler(this.TEST_Click);
+            this.button3.Location = new System.Drawing.Point(54, 169);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(167, 56);
+            this.button3.TabIndex = 2;
+            this.button3.Text = "button3";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // FormMain
             // 
@@ -120,7 +120,7 @@
         private System.Windows.Forms.RichTextBox Rtb_Result;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button TEST;
+        private System.Windows.Forms.Button button3;
     }
 }
 

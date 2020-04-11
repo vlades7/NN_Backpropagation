@@ -7,6 +7,8 @@
         public const int NumMisscols = 2; // Количество незначимых параметров у образа стоящих спереди
         public const int NumParams = 8; // Количество значимых параметров у образа
 
+        public const double PartTrain = 0.8; // Доля обучающей выборки
+
         public const bool IsHeadDeleted = true; // True - если в файле есть строка с заголовками
     }
 }

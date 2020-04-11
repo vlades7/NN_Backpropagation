@@ -24,10 +24,32 @@ namespace NN_Backpropagation.Classes
             return (value - inputLow) * (outputHigh - outputLow) / (inputHigh - inputLow) + outputLow;
         }
 
+        // Нормализация массива значений
+        public static double[] NormalizeArray(double[] values, double[] inputLow, double[] inputHigh, double outputLow = 0.0, double outputHigh = 1.0)
+        {
+            double[] arr = new double[values.Length];
+            for (int i = 0; i < arr.Length; i++)
+            {
+                arr[i] = Normalize(values[i], inputLow[i], inputHigh[i], outputLow, outputHigh);
+            }
+            return arr;
+        }
+
         // Денормализация одного значения
         public static double Denormalize(double value, double outputLow, double outputHigh, double inputLow = 0.0, double inputHigh = 1.0)
         {
             return ((outputLow - outputHigh) * value - inputHigh * outputLow + outputHigh * inputLow) / (inputLow - inputHigh);
+        }
+
+        // Денормализация массива значений
+        public static double[] DenormalizeArray(double[] values, double[] outputLow, double[] outputHigh, double inputLow = 0.0, double inputHigh = 1.0)
+        {
+            double[] arr = new double[values.Length];
+            for (int i = 0; i < arr.Length; i++)
+            {
+                arr[i] = Denormalize(values[i], outputLow[i], outputHigh[i], inputLow, inputHigh);
+            }
+            return arr;
         }
 
         // Поиск минимальных значений во всех колонках
