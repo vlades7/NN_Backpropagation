@@ -29,45 +29,43 @@
         private void InitializeComponent()
         {
             this.ControlPanel = new System.Windows.Forms.Panel();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.Btn_Test = new System.Windows.Forms.Button();
+            this.Btn_Train = new System.Windows.Forms.Button();
             this.InfoPanel = new System.Windows.Forms.Panel();
             this.Rtb_Result = new System.Windows.Forms.RichTextBox();
-            this.button3 = new System.Windows.Forms.Button();
             this.ControlPanel.SuspendLayout();
             this.InfoPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // ControlPanel
             // 
-            this.ControlPanel.Controls.Add(this.button3);
-            this.ControlPanel.Controls.Add(this.button2);
-            this.ControlPanel.Controls.Add(this.button1);
+            this.ControlPanel.Controls.Add(this.Btn_Test);
+            this.ControlPanel.Controls.Add(this.Btn_Train);
             this.ControlPanel.Dock = System.Windows.Forms.DockStyle.Right;
             this.ControlPanel.Location = new System.Drawing.Point(525, 0);
             this.ControlPanel.Name = "ControlPanel";
             this.ControlPanel.Size = new System.Drawing.Size(275, 450);
             this.ControlPanel.TabIndex = 0;
             // 
-            // button2
+            // Btn_Test
             // 
-            this.button2.Location = new System.Drawing.Point(54, 87);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(167, 50);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.Btn_Test.Location = new System.Drawing.Point(53, 84);
+            this.Btn_Test.Name = "Btn_Test";
+            this.Btn_Test.Size = new System.Drawing.Size(167, 42);
+            this.Btn_Test.TabIndex = 4;
+            this.Btn_Test.Text = "Тестирование сети";
+            this.Btn_Test.UseVisualStyleBackColor = true;
+            this.Btn_Test.Click += new System.EventHandler(this.Btn_Test_Click);
             // 
-            // button1
+            // Btn_Train
             // 
-            this.button1.Location = new System.Drawing.Point(54, 12);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(167, 47);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.Btn_Train.Location = new System.Drawing.Point(53, 27);
+            this.Btn_Train.Name = "Btn_Train";
+            this.Btn_Train.Size = new System.Drawing.Size(167, 42);
+            this.Btn_Train.TabIndex = 3;
+            this.Btn_Train.Text = "Обучить нейросеть";
+            this.Btn_Train.UseVisualStyleBackColor = true;
+            this.Btn_Train.Click += new System.EventHandler(this.Btn_Train_Click);
             // 
             // InfoPanel
             // 
@@ -81,21 +79,12 @@
             // Rtb_Result
             // 
             this.Rtb_Result.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Rtb_Result.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Rtb_Result.Location = new System.Drawing.Point(0, 0);
             this.Rtb_Result.Name = "Rtb_Result";
             this.Rtb_Result.Size = new System.Drawing.Size(525, 450);
             this.Rtb_Result.TabIndex = 0;
             this.Rtb_Result.Text = "";
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(54, 169);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(167, 56);
-            this.button3.TabIndex = 2;
-            this.button3.Text = "button3";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // FormMain
             // 
@@ -118,9 +107,8 @@
         private System.Windows.Forms.Panel ControlPanel;
         private System.Windows.Forms.Panel InfoPanel;
         private System.Windows.Forms.RichTextBox Rtb_Result;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button Btn_Train;
+        private System.Windows.Forms.Button Btn_Test;
     }
 }
 

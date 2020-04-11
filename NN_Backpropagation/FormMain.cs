@@ -28,33 +28,25 @@ namespace NN_Backpropagation
         Vector[] X_test = null;
         Vector[] Y_test = null;
 
+        Network network = null;
+
         public FormMain()
         {
             InitializeComponent();
+            Btn_Test.Enabled = false;
         }
 
-        private async void button1_Click(object sender, EventArgs e)
+        private void ReadAndFormatData()
         {
-            button1.Enabled = false;
             FileExcel.Open();
-            DataFromFile = await Task.Run(() => FileExcel.ReadFile());
+            DataFromFile = FileExcel.ReadFile();
             FileExcel.Close();
 
             Utilities.FormatData(ref DataFromFile, Const.IsHeadDeleted, Const.NumMisscols);
             ConvertedData = Utilities.DataStringToDouble(DataFromFile);
-
-            Activate();
-            Rtb_Result.AppendText("Данные считаны успешно!" + Environment.NewLine);
-
-            button1.Enabled = true;
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            // Только после прочтения данных
-        }
-
-        private void button3_Click(object sender, EventArgs e)
+        private void NormalizeData()
         {
             // Нахождение минимальных и максимальных значений для нормализации данных
             MinValues = new double[Const.NumParams];
@@ -64,11 +56,12 @@ namespace NN_Backpropagation
             MaxValues = Utilities.MaxValuesArray(ConvertedData, Const.NumParams);
 
             TrainSize = (int)(Const.PartTrain * ConvertedData.Count);
+        }
 
+        private void CreateTrainSet()
+        {
             X_train = new Vector[TrainSize];
             Y_train = new Vector[TrainSize];
-            X_test = new Vector[ConvertedData.Count - TrainSize];
-            Y_test = new Vector[ConvertedData.Count - TrainSize];
 
             double[] buf = new double[Const.NumParams];
 
@@ -82,6 +75,14 @@ namespace NN_Backpropagation
                 X_train[i] = new Vector(Utilities.NormalizeArray(buf, MinValues, MaxValues));
                 Y_train[i] = new Vector(ConvertedData[i][Const.NumParams]);
             }
+        }
+
+        private void CreateTestSet()
+        {
+            X_test = new Vector[ConvertedData.Count - TrainSize];
+            Y_test = new Vector[ConvertedData.Count - TrainSize];
+
+            double[] buf = new double[Const.NumParams];
 
             // Создание тестовой выборки и её нормализация
             for (int i = TrainSize; i < ConvertedData.Count; i++)
@@ -93,7 +94,62 @@ namespace NN_Backpropagation
                 X_test[i - TrainSize] = new Vector(Utilities.NormalizeArray(buf, MinValues, MaxValues));
                 Y_test[i - TrainSize] = new Vector(ConvertedData[i][Const.NumParams]);
             }
+        }
 
+        private void InitNetwork()
+        {
+            network = new Network(new int[] { 8, 3, 2, 1 });
+        }
+
+        private void TrainNetwork()
+        {
+            if (network != null)
+            {
+                network.Train(X_train, Y_train, 0.5, 1e-7, 200);
+            }
+        }
+
+        private void TestNetwork(Vector[] X, Vector[] Y)
+        {
+            if (network != null)
+            {
+                int CorrectAnswers = 0;
+                for (int i = 0; i < X.Length; i++)
+                {
+                    Vector output = network.Forward(X[i]);
+                    if (Math.Round(output[0]) == Y[i][0])
+                    {
+                        CorrectAnswers++;
+                    }
+                    Rtb_Result.AppendText(i + ")  Label Y = " + Y[i][0] + "    Out = " + output[0] + Environment.NewLine);
+                }
+                Rtb_Result.AppendText("Total accuracy = " + (double)CorrectAnswers / X.Length + Environment.NewLine);
+            }
+        }
+
+        private async void Btn_Train_Click(object sender, EventArgs e)
+        {
+            Btn_Train.Enabled = false;
+
+            await Task.Run(() => ReadAndFormatData());
+
+            NormalizeData();
+            CreateTrainSet();
+            CreateTestSet();
+
+            InitNetwork();
+            TrainNetwork();
+
+            Btn_Train.Enabled = true;
+            if (network != null)
+            {
+                Btn_Test.Enabled = true;
+            }
+        }
+
+        private void Btn_Test_Click(object sender, EventArgs e)
+        {
+            TestNetwork(X_train, Y_train);
         }
     }
 }
