@@ -33,12 +33,14 @@
             this.button1 = new System.Windows.Forms.Button();
             this.InfoPanel = new System.Windows.Forms.Panel();
             this.Rtb_Result = new System.Windows.Forms.RichTextBox();
+            this.TEST = new System.Windows.Forms.Button();
             this.ControlPanel.SuspendLayout();
             this.InfoPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // ControlPanel
             // 
+            this.ControlPanel.Controls.Add(this.TEST);
             this.ControlPanel.Controls.Add(this.button2);
             this.ControlPanel.Controls.Add(this.button1);
             this.ControlPanel.Dock = System.Windows.Forms.DockStyle.Right;
@@ -55,6 +57,7 @@
             this.button2.TabIndex = 1;
             this.button2.Text = "button2";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button1
             // 
@@ -84,6 +87,16 @@
             this.Rtb_Result.TabIndex = 0;
             this.Rtb_Result.Text = "";
             // 
+            // TEST
+            // 
+            this.TEST.Location = new System.Drawing.Point(54, 184);
+            this.TEST.Name = "TEST";
+            this.TEST.Size = new System.Drawing.Size(167, 123);
+            this.TEST.TabIndex = 2;
+            this.TEST.Text = "button3";
+            this.TEST.UseVisualStyleBackColor = true;
+            this.TEST.Click += new System.EventHandler(this.TEST_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -107,6 +120,7 @@
         private System.Windows.Forms.RichTextBox Rtb_Result;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button TEST;
     }
 }
 

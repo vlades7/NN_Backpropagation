@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace NN_Backpropagation.Classes
 {
@@ -27,7 +29,87 @@ namespace NN_Backpropagation.Classes
         {
             return ((outputLow - outputHigh) * value - inputHigh * outputLow + outputHigh * inputLow) / (inputLow - inputHigh);
         }
-        
+
+        // Поиск минимальных значений во всех колонках
+        public static double[] MinValuesArray(List<List<double>> data, int size)
+        {
+            try
+            {
+                double[] minValues = new double[size];
+                for (int i = 0; i < size; i++)
+                {
+                    minValues[i] = MinValueColumn(data, i);
+                }
+                return minValues;
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return null;
+            }
+        }
+
+        // Поиск максимальных значений во всех колонках
+        public static double[] MaxValuesArray(List<List<double>> data, int size)
+        {
+            try
+            {
+                double[] maxValues = new double[size];
+                for (int i = 0; i < size; i++)
+                {
+                    maxValues[i] = MaxValueColumn(data, i);
+                }
+                return maxValues;
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return null;
+            }
+        }
+
+        // Поиск минимального значения в i-ой колонке
+        private static double MinValueColumn(List<List<double>> data, int index)
+        {
+            try
+            {
+                double min = data[0][index];
+                for (int i = 0; i < data.Count; i++)
+                {
+                    if (data[i][index] < min)
+                    {
+                        min = data[i][index];
+                    }
+                }
+                return min;
+            }
+            catch (Exception error)
+            {
+                throw new Exception("Error: can't find min value!", error);
+            }
+        }
+
+        // Поиск максимального значения в i-ой колонке
+        private static double MaxValueColumn(List<List<double>> data, int index)
+        {
+            try
+            {
+                double max = data[0][index];
+                for (int i = 0; i < data.Count; i++)
+                {
+                    if (data[i][index] > max)
+                    {
+                        max = data[i][index];
+                    }
+                }
+                return max;
+            }
+            catch (Exception error)
+            {
+                throw new Exception("Error: can't find max value!", error);
+            }
+        }
+
         // Форматирование данных с удалением первых столбцов и возможностью удаления заголовка
         public static void FormatData(ref List<List<string>> data, bool head, int deleteFirstCols)
         {
@@ -40,6 +122,12 @@ namespace NN_Backpropagation.Classes
             {
                 data[i].RemoveRange(0, deleteFirstCols);
             }
+        }
+
+        // Перевод набора данных из string в double
+        public static List<List<double>> DataStringToDouble(List<List<string>> data) {
+            List<List<double>> doubleData = data.Select(x => x.Select(y => double.Parse(y)).ToList()).ToList();
+            return doubleData;
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace NN_Backpropagation.Classes
@@ -25,10 +26,11 @@ namespace NN_Backpropagation.Classes
             catch
             {
                 // Если нет, то создаём новое приложение
-                ObjExcel = new Excel.Application(); // Запуск приложение
+                ObjExcel = new Excel.Application(); // Запуск приложения
             }
-            // Открываем книгу  
+            // Открываем книгу
             ObjWorkBook = ObjExcel.Workbooks.Open(Const.FilePath, 0, true, 5, "", "", false, Excel.XlPlatform.xlWindows, "", true, false, 0, true, false, false);
+
             // Выбираем таблицу(лист)
             ObjWorkSheet = (Excel.Worksheet)ObjWorkBook.Sheets[1];
         }
