@@ -105,7 +105,7 @@ namespace NN_Backpropagation
         {
             if (network != null)
             {
-                network.Train(X_train, Y_train, 0.5, 1e-7, 200);
+                network.Train(X_train, Y_train, 0.5, 1e-7, 1000);
             }
         }
 

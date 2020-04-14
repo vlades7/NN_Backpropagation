@@ -44,7 +44,7 @@
             this.ControlPanel.Dock = System.Windows.Forms.DockStyle.Right;
             this.ControlPanel.Location = new System.Drawing.Point(525, 0);
             this.ControlPanel.Name = "ControlPanel";
-            this.ControlPanel.Size = new System.Drawing.Size(275, 450);
+            this.ControlPanel.Size = new System.Drawing.Size(275, 501);
             this.ControlPanel.TabIndex = 0;
             // 
             // Btn_Test
@@ -73,7 +73,7 @@
             this.InfoPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.InfoPanel.Location = new System.Drawing.Point(0, 0);
             this.InfoPanel.Name = "InfoPanel";
-            this.InfoPanel.Size = new System.Drawing.Size(525, 450);
+            this.InfoPanel.Size = new System.Drawing.Size(525, 501);
             this.InfoPanel.TabIndex = 1;
             // 
             // Rtb_Result
@@ -82,7 +82,7 @@
             this.Rtb_Result.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Rtb_Result.Location = new System.Drawing.Point(0, 0);
             this.Rtb_Result.Name = "Rtb_Result";
-            this.Rtb_Result.Size = new System.Drawing.Size(525, 450);
+            this.Rtb_Result.Size = new System.Drawing.Size(525, 501);
             this.Rtb_Result.TabIndex = 0;
             this.Rtb_Result.Text = "";
             // 
@@ -90,7 +90,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(800, 501);
             this.Controls.Add(this.InfoPanel);
             this.Controls.Add(this.ControlPanel);
             this.MinimumSize = new System.Drawing.Size(500, 200);
