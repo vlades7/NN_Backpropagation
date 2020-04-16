@@ -63,6 +63,10 @@ namespace NN_Backpropagation.Classes
         {
             Excel.Range usedRows = ObjWorkSheet.UsedRange.Rows[index];
             Array myRow = (Array)usedRows.Cells.Value2;
+            if (myRow == null)
+            {
+                throw new Exception("Row is empty!");
+            }
             usedRows = null;
             return myRow.OfType<object>().Select(o => o.ToString()).ToList();
         }
@@ -71,6 +75,10 @@ namespace NN_Backpropagation.Classes
         {
             Excel.Range usedColumns = ObjWorkSheet.UsedRange.Columns[index];
             Array myColumn = (Array)usedColumns.Cells.Value2;
+            if (myColumn == null)
+            {
+                throw new Exception("Column is empty!");
+            }
             usedColumns = null;
             return myColumn.OfType<object>().Select(o => o.ToString()).ToList();
         }

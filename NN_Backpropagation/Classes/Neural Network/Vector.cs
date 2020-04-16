@@ -1,4 +1,6 @@
-﻿namespace NN_Backpropagation.Classes
+﻿using System;
+
+namespace NN_Backpropagation.Classes
 {
     class Vector
     {
@@ -22,6 +24,18 @@
             {
                 values[i] = _values[i];
             }
+        }
+
+        // Значения вектора в строку
+        public string VectorToStr(int round = 0, string separator = " ")
+        {
+            string str = "";
+            for (int i = 0; i < length - 1; i++)
+            {
+                str += Math.Round(this[i], round) + separator;
+            }
+            str += Math.Round(this[length - 1], round);
+            return str;
         }
 
         // Обращение по индексу

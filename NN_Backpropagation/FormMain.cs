@@ -38,9 +38,17 @@ namespace NN_Backpropagation
 
         private void ReadAndFormatData()
         {
-            FileExcel.Open();
-            DataFromFile = FileExcel.ReadFile();
-            FileExcel.Close();
+            try
+            {
+                FileExcel.Open();
+                DataFromFile = FileExcel.ReadFile();
+                FileExcel.Close();
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
             Utilities.FormatData(ref DataFromFile, Const.IsHeadDeleted, Const.NumMisscols);
             ConvertedData = Utilities.DataStringToDouble(DataFromFile);
@@ -63,17 +71,23 @@ namespace NN_Backpropagation
             X_train = new Vector[TrainSize];
             Y_train = new Vector[TrainSize];
 
-            double[] buf = new double[Const.NumParams];
+            double[] bufX = new double[Const.NumParams];
+            double[] bufY = new double[ConvertedData[0].Count - Const.NumParams];
 
             // Создание обучающей выборки и её нормализация
             for (int i = 0; i < TrainSize; i++)
             {
                 for (int j = 0; j < Const.NumParams; j++)
                 {
-                    buf[j] = ConvertedData[i][j];
+                    bufX[j] = ConvertedData[i][j];
                 }
-                X_train[i] = new Vector(Utilities.NormalizeArray(buf, MinValues, MaxValues));
-                Y_train[i] = new Vector(ConvertedData[i][Const.NumParams]);
+                X_train[i] = new Vector(Utilities.NormalizeArray(bufX, MinValues, MaxValues));
+
+                for (int j = Const.NumParams; j < ConvertedData[i].Count; j++)
+                {
+                    bufY[j - Const.NumParams] = ConvertedData[i][j];
+                }
+                Y_train[i] = new Vector(bufY);
             }
         }
 
@@ -82,30 +96,36 @@ namespace NN_Backpropagation
             X_test = new Vector[ConvertedData.Count - TrainSize];
             Y_test = new Vector[ConvertedData.Count - TrainSize];
 
-            double[] buf = new double[Const.NumParams];
+            double[] bufX = new double[Const.NumParams];
+            double[] bufY = new double[ConvertedData[0].Count - Const.NumParams];
 
             // Создание тестовой выборки и её нормализация
             for (int i = TrainSize; i < ConvertedData.Count; i++)
             {
                 for (int j = 0; j < Const.NumParams; j++)
                 {
-                    buf[j] = ConvertedData[i][j];
+                    bufX[j] = ConvertedData[i][j];
                 }
-                X_test[i - TrainSize] = new Vector(Utilities.NormalizeArray(buf, MinValues, MaxValues));
-                Y_test[i - TrainSize] = new Vector(ConvertedData[i][Const.NumParams]);
+                X_test[i - TrainSize] = new Vector(Utilities.NormalizeArray(bufX, MinValues, MaxValues));
+
+                for (int j = Const.NumParams; j < ConvertedData[i].Count; j++)
+                {
+                    bufY[j - Const.NumParams] = ConvertedData[i][j];
+                }
+                Y_test[i - TrainSize] = new Vector(bufY);
             }
         }
 
         private void InitNetwork()
         {
-            network = new Network(new int[] { 8, 3, 2, 1 });
+            network = new Network(new int[] { 8, 4, 3, 6 });
         }
 
         private void TrainNetwork()
         {
             if (network != null)
             {
-                network.Train(X_train, Y_train, 0.5, 1e-7, 1000);
+                network.Train(X_train, Y_train, 0.5, 1e-7, 100);
             }
         }
 
@@ -113,17 +133,25 @@ namespace NN_Backpropagation
         {
             if (network != null)
             {
-                int CorrectAnswers = 0;
+                double Accuracy = 0;
+                int NumberEqualities = 0;
                 for (int i = 0; i < X.Length; i++)
                 {
                     Vector output = network.Forward(X[i]);
-                    if (Math.Round(output[0]) == Y[i][0])
+                    for (int j = 0; j < output.length; j++)
                     {
-                        CorrectAnswers++;
+                        if (Math.Round(output[j]) == Y[i][j])
+                        {
+                            NumberEqualities++;
+                        }
                     }
-                    Rtb_Result.AppendText(i + ")  Label Y = " + Y[i][0] + "    Out = " + output[0] + Environment.NewLine);
+                    Accuracy += (double)NumberEqualities / output.length;
+                    NumberEqualities = 0;
+                    Rtb_Result.AppendText("#" + (i + 1) + Environment.NewLine + 
+                        "Out:  " + output.VectorToStr() + Environment.NewLine + 
+                        "Y_out:" + Y[i].VectorToStr() + Environment.NewLine);
                 }
-                Rtb_Result.AppendText("Total accuracy = " + (double)CorrectAnswers / X.Length + Environment.NewLine);
+                Rtb_Result.AppendText("Total accuracy = " + Accuracy / X.Length + Environment.NewLine);
             }
         }
 
@@ -132,6 +160,12 @@ namespace NN_Backpropagation
             Btn_Train.Enabled = false;
 
             await Task.Run(() => ReadAndFormatData());
+
+            if (ConvertedData.Count == 0)
+            {
+                Btn_Train.Enabled = true;
+                return;
+            }
 
             NormalizeData();
             CreateTrainSet();
@@ -149,7 +183,14 @@ namespace NN_Backpropagation
 
         private void Btn_Test_Click(object sender, EventArgs e)
         {
-            TestNetwork(X_train, Y_train);
+            if (Const.PartTrain == 1)
+            {
+                TestNetwork(X_train, Y_train);
+            }
+            else
+            {
+                TestNetwork(X_test, Y_test);
+            }
         }
     }
 }

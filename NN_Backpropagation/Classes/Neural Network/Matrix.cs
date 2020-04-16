@@ -19,9 +19,9 @@ namespace NN_Backpropagation.Classes
                 values[i] = new double[rows];
                 for (int j = 0; j < rows; j++)
                 {
+                    values[i][j] = 2 * rand.NextDouble() - 1.0; // Заполняем случайными числами
                     // values[i][j] = rand.NextDouble() - 0.5; // Заполняем случайными числами
-                    // values[i][j] = rand.NextDouble() - 0.5; // Заполняем случайными числами
-                    values[i][j] = rand.NextDouble() * 0.05; // Заполняем случайными числами
+                    // values[i][j] = rand.NextDouble() * 0.05; // Заполняем случайными числами
                 }
             }
         }
