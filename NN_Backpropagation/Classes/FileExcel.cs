@@ -29,7 +29,7 @@ namespace NN_Backpropagation.Classes
                 ObjExcel = new Excel.Application(); // Запуск приложения
             }
             // Открываем книгу
-            ObjWorkBook = ObjExcel.Workbooks.Open(Const.FilePath, 0, true, 5, "", "", false, Excel.XlPlatform.xlWindows, "", true, false, 0, true, false, false);
+            ObjWorkBook = ObjExcel.Workbooks.Open(Global.FilePath, 0, true, 5, "", "", false, Excel.XlPlatform.xlWindows, "", true, false, 0, true, false, false);
 
             // Выбираем таблицу(лист)
             ObjWorkSheet = (Excel.Worksheet)ObjWorkBook.Sheets[1];

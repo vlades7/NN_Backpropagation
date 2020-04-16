@@ -70,17 +70,28 @@ namespace NN_Backpropagation.Classes
                         y += weights[k][i, j] * L[k].x[j];
                     }
 
-                    // Сигмоидальная функция
-                    L[k].z[i] = 1 / (1 + Math.Exp(-y));
-                    L[k].df[i] = L[k].z[i] * (1 - L[k].z[i]);
-
-                    // Гиперболический тангенс
-                    //L[k].z[i] = Math.Tanh(y);
-                    //L[k].df[i] = 1 - L[k].z[i] * L[k].z[i];
-
-                    // ReLU
-                    //L[k].z[i] = Math.Max(0, y);
-                    //L[k].df[i] = y > 0 ? 1 : 0;
+                    switch (Global.IndexActivation)
+                    {
+                        case 0:
+                            // Сигмоидальная функция
+                            L[k].z[i] = 1 / (1 + Math.Exp(-y));
+                            L[k].df[i] = L[k].z[i] * (1 - L[k].z[i]);
+                            break;
+                        case 1:
+                            // Гиперболический тангенс
+                            L[k].z[i] = Math.Tanh(y);
+                            L[k].df[i] = 1 - L[k].z[i] * L[k].z[i];
+                            break;
+                        case 2:
+                            // ReLU
+                            L[k].z[i] = Math.Max(0, y);
+                            L[k].df[i] = y > 0 ? 1 : 0;
+                            break;
+                        default:
+                            L[k].z[i] = 1 / (1 + Math.Exp(-y));
+                            L[k].df[i] = L[k].z[i] * (1 - L[k].z[i]);
+                            break;
+                    }
                 }
             }
 
@@ -134,7 +145,7 @@ namespace NN_Backpropagation.Classes
         }
 
         // Обучение сети
-        public void Train(Vector[] X, Vector[] Y, double alpha, double eps, int epochs)
+        public void Train(Vector[] X, Vector[] Y, double alpha, double eps, int epochs, bool isShuffled)
         {
             int epoch = 1; // Номер эпохи
             double error; // Ошибка эпохи
@@ -148,10 +159,16 @@ namespace NN_Backpropagation.Classes
                     Backward(Y[i], ref error); // Обратное распространение ошибки
                     UpdateWeights(alpha); // Обновление весовых коэффициентов
                 }
+
+                // Перемешивание векторов
+                if (isShuffled)
+                {
+                    Utilities.ShuffleVectors(X, Y);
+                }
+
                 Console.WriteLine("Epoch: {0}, error: {1}", epoch, error); // Выводим в консоль номер эпохи и величину ошибку
                 epoch++;
             } while (epoch <= epochs && error > eps);
         }
-
     }
 }

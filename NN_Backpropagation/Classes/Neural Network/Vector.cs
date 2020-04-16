@@ -2,7 +2,7 @@
 
 namespace NN_Backpropagation.Classes
 {
-    class Vector
+    public class Vector
     {
         public double[] values; // Значения вектора
         public int length; // Длина вектора

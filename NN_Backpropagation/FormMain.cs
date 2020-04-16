@@ -33,6 +33,13 @@ namespace NN_Backpropagation
         public FormMain()
         {
             InitializeComponent();
+
+            CB_Activation.SelectedIndex = 0;
+            TB_Alpha.Text = Global.Alpha.ToString();
+            TB_Eps.Text = Global.Eps.ToString();
+            TB_Epochs.Text = Global.Epochs.ToString();
+            Check_IsShuffled.Checked = Global.IsShuffled;
+
             Btn_Test.Enabled = false;
         }
 
@@ -50,20 +57,20 @@ namespace NN_Backpropagation
                 return;
             }
 
-            Utilities.FormatData(ref DataFromFile, Const.IsHeadDeleted, Const.NumMisscols);
+            Utilities.FormatData(ref DataFromFile, Global.IsHeadDeleted, Global.NumMisscols);
             ConvertedData = Utilities.DataStringToDouble(DataFromFile);
         }
 
         private void NormalizeData()
         {
             // Нахождение минимальных и максимальных значений для нормализации данных
-            MinValues = new double[Const.NumParams];
-            MaxValues = new double[Const.NumParams];
+            MinValues = new double[Global.NumParams];
+            MaxValues = new double[Global.NumParams];
 
-            MinValues = Utilities.MinValuesArray(ConvertedData, Const.NumParams);
-            MaxValues = Utilities.MaxValuesArray(ConvertedData, Const.NumParams);
+            MinValues = Utilities.MinValuesArray(ConvertedData, Global.NumParams);
+            MaxValues = Utilities.MaxValuesArray(ConvertedData, Global.NumParams);
 
-            TrainSize = (int)(Const.PartTrain * ConvertedData.Count);
+            TrainSize = (int)(Global.PartTrain * ConvertedData.Count);
         }
 
         private void CreateTrainSet()
@@ -71,21 +78,21 @@ namespace NN_Backpropagation
             X_train = new Vector[TrainSize];
             Y_train = new Vector[TrainSize];
 
-            double[] bufX = new double[Const.NumParams];
-            double[] bufY = new double[ConvertedData[0].Count - Const.NumParams];
+            double[] bufX = new double[Global.NumParams];
+            double[] bufY = new double[ConvertedData[0].Count - Global.NumParams];
 
             // Создание обучающей выборки и её нормализация
             for (int i = 0; i < TrainSize; i++)
             {
-                for (int j = 0; j < Const.NumParams; j++)
+                for (int j = 0; j < Global.NumParams; j++)
                 {
                     bufX[j] = ConvertedData[i][j];
                 }
                 X_train[i] = new Vector(Utilities.NormalizeArray(bufX, MinValues, MaxValues));
 
-                for (int j = Const.NumParams; j < ConvertedData[i].Count; j++)
+                for (int j = Global.NumParams; j < ConvertedData[i].Count; j++)
                 {
-                    bufY[j - Const.NumParams] = ConvertedData[i][j];
+                    bufY[j - Global.NumParams] = ConvertedData[i][j];
                 }
                 Y_train[i] = new Vector(bufY);
             }
@@ -96,21 +103,21 @@ namespace NN_Backpropagation
             X_test = new Vector[ConvertedData.Count - TrainSize];
             Y_test = new Vector[ConvertedData.Count - TrainSize];
 
-            double[] bufX = new double[Const.NumParams];
-            double[] bufY = new double[ConvertedData[0].Count - Const.NumParams];
+            double[] bufX = new double[Global.NumParams];
+            double[] bufY = new double[ConvertedData[0].Count - Global.NumParams];
 
             // Создание тестовой выборки и её нормализация
             for (int i = TrainSize; i < ConvertedData.Count; i++)
             {
-                for (int j = 0; j < Const.NumParams; j++)
+                for (int j = 0; j < Global.NumParams; j++)
                 {
                     bufX[j] = ConvertedData[i][j];
                 }
                 X_test[i - TrainSize] = new Vector(Utilities.NormalizeArray(bufX, MinValues, MaxValues));
 
-                for (int j = Const.NumParams; j < ConvertedData[i].Count; j++)
+                for (int j = Global.NumParams; j < ConvertedData[i].Count; j++)
                 {
-                    bufY[j - Const.NumParams] = ConvertedData[i][j];
+                    bufY[j - Global.NumParams] = ConvertedData[i][j];
                 }
                 Y_test[i - TrainSize] = new Vector(bufY);
             }
@@ -125,7 +132,25 @@ namespace NN_Backpropagation
         {
             if (network != null)
             {
-                network.Train(X_train, Y_train, 0.5, 1e-7, 100);
+                string str = "Обучение начато..." + Environment.NewLine +
+                    "Параметры нейросети:" + Environment.NewLine;
+                str += "\tСкорость обучения: " + Global.Alpha + Environment.NewLine;
+                str += "\tТочность нейросети: " + Global.Eps + Environment.NewLine;
+                str += "\tКоличество эпох: " + Global.Epochs + Environment.NewLine;
+                if (Global.IsShuffled)
+                {
+                    str += "\tПеретасовка векторов выбрана" + Environment.NewLine;
+                }
+                else
+                {
+                    str += "\tПеретасовка векторов не выбрана" + Environment.NewLine;
+                }
+                Rtb_Result.AppendText(str);
+
+                network.Train(X_train, Y_train, Global.Alpha, Global.Eps, Global.Epochs, Global.IsShuffled);
+
+                str = "Обучение завершено!" + Environment.NewLine;
+                Rtb_Result.AppendText(str);
             }
         }
 
@@ -133,8 +158,9 @@ namespace NN_Backpropagation
         {
             if (network != null)
             {
-                double Accuracy = 0;
-                int NumberEqualities = 0;
+                double Accuracy = 0; // Точность нейросети
+                int NumberEqualities = 0; // Количество совпадений на нейронах
+
                 for (int i = 0; i < X.Length; i++)
                 {
                     Vector output = network.Forward(X[i]);
@@ -147,13 +173,16 @@ namespace NN_Backpropagation
                     }
                     Accuracy += (double)NumberEqualities / output.length;
                     NumberEqualities = 0;
+
                     Rtb_Result.AppendText("#" + (i + 1) + Environment.NewLine + 
                         "Out:  " + output.VectorToStr() + Environment.NewLine + 
-                        "Y_out:" + Y[i].VectorToStr() + Environment.NewLine);
+                        "Y_out:" + Y[i].VectorToStr() + Environment.NewLine + Environment.NewLine);
                 }
-                Rtb_Result.AppendText("Total accuracy = " + Accuracy / X.Length + Environment.NewLine);
+
+                Rtb_Result.AppendText("Total accuracy = " + Math.Round(Accuracy / X.Length, 6) + Environment.NewLine + Environment.NewLine);
             }
         }
+
 
         private async void Btn_Train_Click(object sender, EventArgs e)
         {
@@ -183,7 +212,7 @@ namespace NN_Backpropagation
 
         private void Btn_Test_Click(object sender, EventArgs e)
         {
-            if (Const.PartTrain == 1)
+            if (Global.PartTrain == 1)
             {
                 TestNetwork(X_train, Y_train);
             }
@@ -192,5 +221,67 @@ namespace NN_Backpropagation
                 TestNetwork(X_test, Y_test);
             }
         }
+
+        #region Настройки нейросети и валидация данных
+        private void CB_Activation_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Global.IndexActivation = CB_Activation.SelectedIndex;
+        }
+
+        private void TB_Alpha_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                Global.Alpha = double.Parse(TB_Alpha.Text);
+                TB_Alpha.Text = Global.Alpha.ToString();
+            }
+            catch
+            {
+                TB_Alpha.Text = "0,5";
+                Global.Alpha = double.Parse(TB_Alpha.Text);
+            }
+        }
+
+        private void TB_Eps_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                if (double.Parse(TB_Eps.Text) <= 0)
+                {
+                    TB_Eps.Text = "0,0001";
+                }
+                Global.Eps = double.Parse(TB_Eps.Text);
+                TB_Eps.Text = Global.Eps.ToString();
+            }
+            catch
+            {
+                TB_Eps.Text = "0,0001";
+                Global.Eps = double.Parse(TB_Eps.Text);
+            }
+        }
+
+        private void TB_Epochs_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                if (int.Parse(TB_Epochs.Text) <= 0)
+                {
+                    TB_Epochs.Text = "100";
+                }
+                Global.Epochs = int.Parse(TB_Epochs.Text);
+                TB_Epochs.Text = Global.Epochs.ToString();
+            }
+            catch
+            {
+                TB_Epochs.Text = "100";
+                Global.Epochs = int.Parse(TB_Epochs.Text);
+            }
+        }
+
+        private void Check_IsShuffled_CheckedChanged(object sender, EventArgs e)
+        {
+            Global.IsShuffled = Check_IsShuffled.Checked;
+        }
+        #endregion
     }
 }

@@ -151,5 +151,26 @@ namespace NN_Backpropagation.Classes
             List<List<double>> doubleData = data.Select(x => x.Select(y => double.Parse(y)).ToList()).ToList();
             return doubleData;
         }
+
+        // Перетасовка векторов
+        public static void ShuffleVectors(Vector[] x, Vector[] y)
+        {
+            int j = 0;
+            Random random = new Random(DateTime.Now.Millisecond);
+            Vector buf = null;
+
+            for (int i = x.Length - 1; i >= 1; i--)
+            {
+                j = random.Next(i + 1);
+
+                buf = x[i];
+                x[i] = x[j];
+                x[j] = buf;
+
+                buf = y[i];
+                y[i] = y[j];
+                y[j] = buf;
+            }
+        }
     }
 }
