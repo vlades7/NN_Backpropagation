@@ -43,6 +43,9 @@
             this.Btn_Train = new System.Windows.Forms.Button();
             this.InfoPanel = new System.Windows.Forms.Panel();
             this.Rtb_Result = new System.Windows.Forms.RichTextBox();
+            this.Label_PartTrain = new System.Windows.Forms.Label();
+            this.TB_PartTrain = new System.Windows.Forms.TextBox();
+            this.Btn_Clear = new System.Windows.Forms.Button();
             this.ControlPanel.SuspendLayout();
             this.GB_Settings.SuspendLayout();
             this.InfoPanel.SuspendLayout();
@@ -50,17 +53,20 @@
             // 
             // ControlPanel
             // 
+            this.ControlPanel.Controls.Add(this.Btn_Clear);
             this.ControlPanel.Controls.Add(this.GB_Settings);
             this.ControlPanel.Controls.Add(this.Btn_Test);
             this.ControlPanel.Controls.Add(this.Btn_Train);
             this.ControlPanel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.ControlPanel.Location = new System.Drawing.Point(524, 0);
+            this.ControlPanel.Location = new System.Drawing.Point(689, 0);
             this.ControlPanel.Name = "ControlPanel";
-            this.ControlPanel.Size = new System.Drawing.Size(301, 501);
+            this.ControlPanel.Size = new System.Drawing.Size(557, 470);
             this.ControlPanel.TabIndex = 0;
             // 
             // GB_Settings
             // 
+            this.GB_Settings.Controls.Add(this.TB_PartTrain);
+            this.GB_Settings.Controls.Add(this.Label_PartTrain);
             this.GB_Settings.Controls.Add(this.Check_IsShuffled);
             this.GB_Settings.Controls.Add(this.TB_Epochs);
             this.GB_Settings.Controls.Add(this.Label_Epochs);
@@ -72,17 +78,18 @@
             this.GB_Settings.Controls.Add(this.CB_Activation);
             this.GB_Settings.Location = new System.Drawing.Point(29, 21);
             this.GB_Settings.Name = "GB_Settings";
-            this.GB_Settings.Size = new System.Drawing.Size(260, 303);
+            this.GB_Settings.Size = new System.Drawing.Size(505, 303);
             this.GB_Settings.TabIndex = 5;
             this.GB_Settings.TabStop = false;
             this.GB_Settings.Text = "Настройки нейросети";
             // 
             // Check_IsShuffled
             // 
+            this.Check_IsShuffled.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.Check_IsShuffled.AutoSize = true;
             this.Check_IsShuffled.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.Check_IsShuffled.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Check_IsShuffled.Location = new System.Drawing.Point(18, 262);
+            this.Check_IsShuffled.Location = new System.Drawing.Point(301, 202);
             this.Check_IsShuffled.Name = "Check_IsShuffled";
             this.Check_IsShuffled.Size = new System.Drawing.Size(198, 22);
             this.Check_IsShuffled.TabIndex = 9;
@@ -175,7 +182,7 @@
             // Btn_Test
             // 
             this.Btn_Test.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Btn_Test.Location = new System.Drawing.Point(66, 420);
+            this.Btn_Test.Location = new System.Drawing.Point(47, 403);
             this.Btn_Test.Name = "Btn_Test";
             this.Btn_Test.Size = new System.Drawing.Size(198, 42);
             this.Btn_Test.TabIndex = 4;
@@ -186,7 +193,7 @@
             // Btn_Train
             // 
             this.Btn_Train.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Btn_Train.Location = new System.Drawing.Point(66, 355);
+            this.Btn_Train.Location = new System.Drawing.Point(47, 355);
             this.Btn_Train.Name = "Btn_Train";
             this.Btn_Train.Size = new System.Drawing.Size(198, 42);
             this.Btn_Train.TabIndex = 3;
@@ -200,28 +207,61 @@
             this.InfoPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.InfoPanel.Location = new System.Drawing.Point(0, 0);
             this.InfoPanel.Name = "InfoPanel";
-            this.InfoPanel.Size = new System.Drawing.Size(524, 501);
+            this.InfoPanel.Size = new System.Drawing.Size(689, 470);
             this.InfoPanel.TabIndex = 1;
             // 
             // Rtb_Result
             // 
+            this.Rtb_Result.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.Rtb_Result.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Rtb_Result.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Rtb_Result.Location = new System.Drawing.Point(0, 0);
             this.Rtb_Result.Name = "Rtb_Result";
-            this.Rtb_Result.Size = new System.Drawing.Size(524, 501);
+            this.Rtb_Result.ReadOnly = true;
+            this.Rtb_Result.Size = new System.Drawing.Size(689, 470);
             this.Rtb_Result.TabIndex = 0;
             this.Rtb_Result.Text = "";
+            this.Rtb_Result.TextChanged += new System.EventHandler(this.Rtb_Result_TextChanged);
+            // 
+            // Label_PartTrain
+            // 
+            this.Label_PartTrain.AutoSize = true;
+            this.Label_PartTrain.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.Label_PartTrain.Location = new System.Drawing.Point(298, 90);
+            this.Label_PartTrain.Name = "Label_PartTrain";
+            this.Label_PartTrain.Size = new System.Drawing.Size(115, 18);
+            this.Label_PartTrain.TabIndex = 10;
+            this.Label_PartTrain.Text = "Доля выборки:";
+            // 
+            // TB_PartTrain
+            // 
+            this.TB_PartTrain.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.TB_PartTrain.Location = new System.Drawing.Point(340, 115);
+            this.TB_PartTrain.Name = "TB_PartTrain";
+            this.TB_PartTrain.Size = new System.Drawing.Size(159, 24);
+            this.TB_PartTrain.TabIndex = 11;
+            this.TB_PartTrain.Leave += new System.EventHandler(this.TB_PartTrain_Leave);
+            // 
+            // Btn_Clear
+            // 
+            this.Btn_Clear.Location = new System.Drawing.Point(330, 355);
+            this.Btn_Clear.Name = "Btn_Clear";
+            this.Btn_Clear.Size = new System.Drawing.Size(198, 42);
+            this.Btn_Clear.TabIndex = 6;
+            this.Btn_Clear.Text = "Очистить вывод";
+            this.Btn_Clear.UseVisualStyleBackColor = true;
+            this.Btn_Clear.Click += new System.EventHandler(this.Btn_Clear_Click);
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(825, 501);
+            this.ClientSize = new System.Drawing.Size(1246, 470);
             this.Controls.Add(this.InfoPanel);
             this.Controls.Add(this.ControlPanel);
             this.MinimumSize = new System.Drawing.Size(500, 200);
             this.Name = "FormMain";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Нейронная сеть - Обратное распространение ошибки";
             this.ControlPanel.ResumeLayout(false);
             this.GB_Settings.ResumeLayout(false);
@@ -248,6 +288,9 @@
         private System.Windows.Forms.TextBox TB_Epochs;
         private System.Windows.Forms.Label Label_Epochs;
         private System.Windows.Forms.CheckBox Check_IsShuffled;
+        private System.Windows.Forms.Label Label_PartTrain;
+        private System.Windows.Forms.TextBox TB_PartTrain;
+        private System.Windows.Forms.Button Btn_Clear;
     }
 }
 

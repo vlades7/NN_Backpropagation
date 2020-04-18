@@ -39,6 +39,7 @@ namespace NN_Backpropagation
             TB_Alpha.Text = Global.Alpha.ToString();
             TB_Eps.Text = Global.Eps.ToString();
             TB_Epochs.Text = Global.Epochs.ToString();
+            TB_PartTrain.Text = Global.PartTrain.ToString();
             Check_IsShuffled.Checked = Global.IsShuffled;
 
             Btn_Test.Enabled = false;
@@ -175,7 +176,7 @@ namespace NN_Backpropagation
         // Инициализация нейронной сети
         private void InitNetwork()
         {
-            network = new Network(new int[] { 18, 4, 3, 6 });
+            network = new Network(new int[] { 18, 9, 3, 6 });
         }
 
         // Обучение нейронной сети
@@ -183,11 +184,27 @@ namespace NN_Backpropagation
         {
             if (network != null)
             {
-                string str = "Обучение начато..." + Environment.NewLine +
-                    "Параметры нейросети:" + Environment.NewLine;
+                string str = "Обучение начато..." + Environment.NewLine;
+                str += "Параметры нейросети:" + Environment.NewLine;
+                switch (Global.IndexActivation)
+                {
+                    case 0:
+                        str += "\tФункция активации: сигмоидальная функция" + Environment.NewLine;
+                        break;
+                    case 1:
+                        str += "\tФункция активации: гиперболический тангенс" + Environment.NewLine;
+                        break;
+                    case 2:
+                        str += "\tФункция активации: ReLU" + Environment.NewLine;
+                        break;
+                    default:
+                        str += "\tФункция активации: сигмоидальная функция" + Environment.NewLine; ;
+                        break;
+                }
                 str += "\tСкорость обучения: " + Global.Alpha + Environment.NewLine;
                 str += "\tТочность нейросети: " + Global.Eps + Environment.NewLine;
                 str += "\tКоличество эпох: " + Global.Epochs + Environment.NewLine;
+                str += "\tДоля выборки: " + Global.PartTrain + Environment.NewLine;
                 if (Global.IsShuffled)
                 {
                     str += "\tПеретасовка векторов выбрана" + Environment.NewLine;
@@ -200,7 +217,7 @@ namespace NN_Backpropagation
 
                 await Task.Run(() => network.Train(X_train, Y_train, Global.Alpha, Global.Eps, Global.Epochs, Global.IsShuffled));
 
-                str = "Обучение завершено!" + Environment.NewLine;
+                str = "Обучение завершено!" + Environment.NewLine + Environment.NewLine;
                 Rtb_Result.AppendText(str);
             }
         }
@@ -210,28 +227,46 @@ namespace NN_Backpropagation
         {
             if (network != null)
             {
-                double Accuracy = 0; // Точность нейросети
-                int NumberEqualities = 0; // Количество совпадений на нейронах
+                double TotalAccuracy = 0;                              // Общая точность нейросети
+                double[] Accuracy = new double[Global.OutputSize];     // Точность нейросети для каждого нейрона
+                int[] NumberEqualities = new int[Global.OutputSize];   // Количество совпадений на нейронах
 
                 for (int i = 0; i < X.Length; i++)
                 {
                     Vector output = network.Forward(X[i]);
-                    for (int j = 0; j < output.length; j++)
+                    for (int j = 0; j < Global.OutputSize; j++)
                     {
                         if (Math.Round(output[j]) == Y[i][j])
                         {
-                            NumberEqualities++;
+                            NumberEqualities[j]++;
                         }
                     }
-                    Accuracy += (double)NumberEqualities / output.length;
-                    NumberEqualities = 0;
 
-                    Rtb_Result.AppendText("#" + (i + 1) + Environment.NewLine + 
-                        "Out:  " + output.VectorToStr() + Environment.NewLine + 
-                        "Y_out:" + Y[i].VectorToStr() + Environment.NewLine + Environment.NewLine);
+                    if (Global.PrintLogs)
+                    {
+                        Rtb_Result.AppendText("#" + (i + 1) + Environment.NewLine +
+                            "Out:  " + output.VectorToStr() + Environment.NewLine +
+                            "Y_out:" + Y[i].VectorToStr() + Environment.NewLine + Environment.NewLine);
+                    }
                 }
 
-                Rtb_Result.AppendText("Total accuracy = " + Math.Round(Accuracy / X.Length, 6) + Environment.NewLine + Environment.NewLine);
+                for (int i = 0; i < Global.OutputSize; i++)
+                {
+                    Accuracy[i] = (double)NumberEqualities[i] / X.Length;
+                }
+
+                Accuracy.Sum(x => TotalAccuracy += x);
+                TotalAccuracy /= Global.OutputSize;
+
+                string strOutput = "";
+                strOutput += string.Format("Точность - жизнеспособность: {0}\n", Math.Round(Accuracy[0], 6));
+                strOutput += string.Format("Точность - физическое развитие: {0}\n", Math.Round(Accuracy[1], 6));
+                strOutput += string.Format("Точность - норма НПР: {0}\n", Math.Round(Accuracy[2], 6));
+                strOutput += string.Format("Точность - моторика: {0}\n", Math.Round(Accuracy[3], 6));
+                strOutput += string.Format("Точность - речь: {0}\n", Math.Round(Accuracy[4], 6));
+                strOutput += string.Format("Точность - моторика и речь: {0}\n\n", Math.Round(Accuracy[5], 6));
+                strOutput += string.Format("Общая точность: {0}\n", Math.Round(TotalAccuracy, 6));
+                Rtb_Result.AppendText(strOutput);
             }
         }
 
@@ -277,6 +312,11 @@ namespace NN_Backpropagation
             {
                 TestNetwork(X_test, Y_test);
             }
+        }
+
+        private void Btn_Clear_Click(object sender, EventArgs e)
+        {
+            Rtb_Result.Clear();
         }
 
         #region Настройки нейросети и валидация данных
@@ -335,10 +375,34 @@ namespace NN_Backpropagation
             }
         }
 
+        private void TB_PartTrain_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                if (double.Parse(TB_PartTrain.Text) <= 0.3 || double.Parse(TB_PartTrain.Text) > 1.0)
+                {
+                    TB_PartTrain.Text = "1,0";
+                }
+                Global.PartTrain = double.Parse(TB_PartTrain.Text);
+                TB_PartTrain.Text = Global.PartTrain.ToString();
+            }
+            catch
+            {
+                TB_PartTrain.Text = "1,0";
+                Global.PartTrain = double.Parse(TB_PartTrain.Text);
+            }
+        }
+
         private void Check_IsShuffled_CheckedChanged(object sender, EventArgs e)
         {
             Global.IsShuffled = Check_IsShuffled.Checked;
         }
+
+        private void Rtb_Result_TextChanged(object sender, EventArgs e)
+        {
+            Rtb_Result.ScrollToCaret();
+        }
         #endregion
+
     }
 }
