@@ -53,14 +53,14 @@ namespace NN_Backpropagation.Classes
         }
 
         // Поиск минимальных значений во всех колонках
-        public static double[] MinValuesArray(List<List<double>> data, int size)
+        public static double[] MinValuesArray(List<List<double>> data, int size, int from)
         {
             try
             {
                 double[] minValues = new double[size];
                 for (int i = 0; i < size; i++)
                 {
-                    minValues[i] = MinValueColumn(data, i);
+                    minValues[i] = MinValueColumn(data, i + from);
                 }
                 return minValues;
             }
@@ -72,14 +72,14 @@ namespace NN_Backpropagation.Classes
         }
 
         // Поиск максимальных значений во всех колонках
-        public static double[] MaxValuesArray(List<List<double>> data, int size)
+        public static double[] MaxValuesArray(List<List<double>> data, int size, int from)
         {
             try
             {
                 double[] maxValues = new double[size];
                 for (int i = 0; i < size; i++)
                 {
-                    maxValues[i] = MaxValueColumn(data, i);
+                    maxValues[i] = MaxValueColumn(data, i + from);
                 }
                 return maxValues;
             }
@@ -132,8 +132,8 @@ namespace NN_Backpropagation.Classes
             }
         }
 
-        // Форматирование данных с удалением первых столбцов и возможностью удаления заголовка
-        public static void FormatData(ref List<List<string>> data, bool head, int deleteFirstCols)
+        // Форматирование данных с удалением столбцов с указанной позиции и возможностью удаления заголовка
+        public static void FormatData(ref List<List<string>> data, bool head, int from, int count)
         {
             if (head)
             {
@@ -142,7 +142,7 @@ namespace NN_Backpropagation.Classes
 
             for (int i = 0; i < data.Count; i++)
             {
-                data[i].RemoveRange(0, deleteFirstCols);
+                data[i].RemoveRange(from, count);
             }
         }
 

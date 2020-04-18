@@ -43,7 +43,6 @@
             this.Btn_Train = new System.Windows.Forms.Button();
             this.InfoPanel = new System.Windows.Forms.Panel();
             this.Rtb_Result = new System.Windows.Forms.RichTextBox();
-            this.button1 = new System.Windows.Forms.Button();
             this.ControlPanel.SuspendLayout();
             this.GB_Settings.SuspendLayout();
             this.InfoPanel.SuspendLayout();
@@ -51,7 +50,6 @@
             // 
             // ControlPanel
             // 
-            this.ControlPanel.Controls.Add(this.button1);
             this.ControlPanel.Controls.Add(this.GB_Settings);
             this.ControlPanel.Controls.Add(this.Btn_Test);
             this.ControlPanel.Controls.Add(this.Btn_Train);
@@ -215,16 +213,6 @@
             this.Rtb_Result.TabIndex = 0;
             this.Rtb_Result.Text = "";
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(6, 330);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 6;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -260,7 +248,6 @@
         private System.Windows.Forms.TextBox TB_Epochs;
         private System.Windows.Forms.Label Label_Epochs;
         private System.Windows.Forms.CheckBox Check_IsShuffled;
-        private System.Windows.Forms.Button button1;
     }
 }
 

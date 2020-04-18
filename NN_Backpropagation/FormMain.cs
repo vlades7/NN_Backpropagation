@@ -44,6 +44,7 @@ namespace NN_Backpropagation
             Btn_Test.Enabled = false;
         }
 
+        // Считывание и форматирование данных из Excel
         private void ReadAndFormatData()
         {
             try
@@ -58,10 +59,33 @@ namespace NN_Backpropagation
                 return;
             }
 
-            Utilities.FormatData(ref DataFromFile, Global.IsHeadDeleted, Global.NumMissCols);
+            Utilities.FormatData(ref DataFromFile, Global.IsHeadDeleted, Global.NumInfoCols, Global.NumMissCols);
             ConvertedData = Utilities.DataStringToDouble(DataFromFile);
         }
 
+        // Нормализация данных из Excel
+        private void NormalizeData()
+        {
+            // Нахождение минимальных и максимальных значений для нормализации данных
+            MinValues = new double[Global.NumParamsExcel];
+            MaxValues = new double[Global.NumParamsExcel];
+
+            MinValues = Utilities.MinValuesArray(ConvertedData, Global.NumParamsExcel, Global.NumInfoCols);
+            MaxValues = Utilities.MaxValuesArray(ConvertedData, Global.NumParamsExcel, Global.NumInfoCols);
+
+            for (int i = 0; i < ConvertedData.Count; i++)
+            {
+                for (int j = 0; j < Global.NumParamsExcel; j++)
+                {
+                    ConvertedData[i][j + Global.NumInfoCols] = Utilities.Normalize(ConvertedData[i][j + Global.NumInfoCols],
+                        MinValues[j], MaxValues[j]);
+                }
+            }
+
+            TrainSize = (int)(Global.PartTrain * ConvertedData.Count);
+        }
+
+        // Считывание файлов RR-интервалов
         private void ReadFilesRR()
         {
             DirectoryInfo dir = new DirectoryInfo(Global.DirPath);
@@ -74,7 +98,7 @@ namespace NN_Backpropagation
                 catch { }
             }
 
-            filesRR.Sort((a, b) => a.Id > b.Id ? 1 : -1);
+            filesRR.Sort((a, b) => a.Id >= b.Id ? 1 : -1);
 
             foreach (FileRR f in filesRR)
             {
@@ -82,73 +106,79 @@ namespace NN_Backpropagation
             }
         }
 
-        private void NormalizeData()
+        // Вставка нормализированных диапазонов вхождений в общие данные
+        private void NormRangesToData()
         {
-            // Нахождение минимальных и максимальных значений для нормализации данных
-            MinValues = new double[Global.NumParams];
-            MaxValues = new double[Global.NumParams];
-
-            MinValues = Utilities.MinValuesArray(ConvertedData, Global.NumParams);
-            MaxValues = Utilities.MaxValuesArray(ConvertedData, Global.NumParams);
-
-            TrainSize = (int)(Global.PartTrain * ConvertedData.Count);
+            double[] normRanges = new double[Global.CountRanges];
+            for (int i = 0; i < ConvertedData.Count; i++)
+            {
+                for (int j = 0; j < Global.CountRanges; j++)
+                {
+                    normRanges[j] = Utilities.Normalize(filesRR[i].ranges[j], filesRR[i].MinCount, filesRR[i].MaxCount);
+                }
+                ConvertedData[i].InsertRange(Global.NumInfoCols, normRanges);
+            }
         }
 
+        // Создание набора данных для обучения
         private void CreateTrainSet()
         {
             X_train = new Vector[TrainSize];
             Y_train = new Vector[TrainSize];
 
-            double[] bufX = new double[Global.NumParams];
-            double[] bufY = new double[ConvertedData[0].Count - Global.NumParams];
+            double[] bufX = new double[Global.InputSize];
+            double[] bufY = new double[Global.OutputSize];
 
             // Создание обучающей выборки и её нормализация
             for (int i = 0; i < TrainSize; i++)
             {
-                for (int j = 0; j < Global.NumParams; j++)
+                for (int j = 0; j < Global.InputSize; j++)
                 {
-                    bufX[j] = ConvertedData[i][j];
+                    bufX[j] = ConvertedData[i][j + Global.NumInfoCols];
                 }
-                X_train[i] = new Vector(Utilities.NormalizeArray(bufX, MinValues, MaxValues));
+                X_train[i] = new Vector(bufX);
 
-                for (int j = Global.NumParams; j < ConvertedData[i].Count; j++)
+                for (int j = Global.InputSize + Global.NumInfoCols; j < ConvertedData[i].Count; j++)
                 {
-                    bufY[j - Global.NumParams] = ConvertedData[i][j];
+                    bufY[j - Global.InputSize - Global.NumInfoCols] = ConvertedData[i][j];
                 }
                 Y_train[i] = new Vector(bufY);
             }
         }
 
+        // Создание набора данных для тестирования
         private void CreateTestSet()
         {
             X_test = new Vector[ConvertedData.Count - TrainSize];
             Y_test = new Vector[ConvertedData.Count - TrainSize];
 
-            double[] bufX = new double[Global.NumParams];
-            double[] bufY = new double[ConvertedData[0].Count - Global.NumParams];
+            double[] bufX = new double[Global.InputSize];
+            double[] bufY = new double[Global.OutputSize];
 
             // Создание тестовой выборки и её нормализация
             for (int i = TrainSize; i < ConvertedData.Count; i++)
             {
-                for (int j = 0; j < Global.NumParams; j++)
+                for (int j = 0; j < Global.InputSize; j++)
                 {
-                    bufX[j] = ConvertedData[i][j];
+                    bufX[j] = ConvertedData[i][j + Global.NumInfoCols];
                 }
-                X_test[i - TrainSize] = new Vector(Utilities.NormalizeArray(bufX, MinValues, MaxValues));
+                X_test[i - TrainSize] = new Vector(bufX);
 
-                for (int j = Global.NumParams; j < ConvertedData[i].Count; j++)
+                for (int j = Global.InputSize + Global.NumInfoCols; j < ConvertedData[i].Count; j++)
                 {
-                    bufY[j - Global.NumParams] = ConvertedData[i][j];
+                    bufY[j - Global.InputSize - Global.NumInfoCols] = ConvertedData[i][j];
                 }
                 Y_test[i - TrainSize] = new Vector(bufY);
             }
         }
 
+        // Инициализация нейронной сети
         private void InitNetwork()
         {
-            network = new Network(new int[] { 8, 4, 3, 6 });
+            network = new Network(new int[] { 18, 4, 3, 6 });
         }
 
+        // Обучение нейронной сети
         private async void TrainNetwork()
         {
             if (network != null)
@@ -175,6 +205,7 @@ namespace NN_Backpropagation
             }
         }
 
+        // Тестирование нейронной сети
         private void TestNetwork(Vector[] X, Vector[] Y)
         {
             if (network != null)
@@ -204,7 +235,6 @@ namespace NN_Backpropagation
             }
         }
 
-
         private async void Btn_Train_Click(object sender, EventArgs e)
         {
             Btn_Train.Enabled = false;
@@ -218,8 +248,14 @@ namespace NN_Backpropagation
             }
 
             NormalizeData();
+            ReadFilesRR();
+            NormRangesToData();
+            
             CreateTrainSet();
-            CreateTestSet();
+            if (Global.PartTrain != 1)
+            {
+                CreateTestSet();
+            }
 
             InitNetwork();
             TrainNetwork();
@@ -304,10 +340,5 @@ namespace NN_Backpropagation
             Global.IsShuffled = Check_IsShuffled.Checked;
         }
         #endregion
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            ReadFilesRR();
-        }
     }
 }
