@@ -19,6 +19,7 @@ namespace NN_Backpropagation
 
         List<List<string>> DataFromFile = new List<List<string>>();    // Данные считанные из файла
         List<List<double>> ConvertedData = new List<List<double>>();   // Данные конвертированные в числа
+        List<FileRR> filesRR = new List<FileRR>();                     // Файлы с RR-интервалами
 
         double[] MaxValues = null;
         double[] MinValues = null;
@@ -57,8 +58,28 @@ namespace NN_Backpropagation
                 return;
             }
 
-            Utilities.FormatData(ref DataFromFile, Global.IsHeadDeleted, Global.NumMisscols);
+            Utilities.FormatData(ref DataFromFile, Global.IsHeadDeleted, Global.NumMissCols);
             ConvertedData = Utilities.DataStringToDouble(DataFromFile);
+        }
+
+        private void ReadFilesRR()
+        {
+            DirectoryInfo dir = new DirectoryInfo(Global.DirPath);
+            foreach (FileInfo file in dir.GetFiles())
+            {
+                try
+                {
+                    filesRR.Add(new FileRR(file.FullName));
+                }
+                catch { }
+            }
+
+            filesRR.Sort((a, b) => a.Id > b.Id ? 1 : -1);
+
+            foreach (FileRR f in filesRR)
+            {
+                f.CreateRanges();
+            }
         }
 
         private void NormalizeData()
@@ -128,7 +149,7 @@ namespace NN_Backpropagation
             network = new Network(new int[] { 8, 4, 3, 6 });
         }
 
-        private void TrainNetwork()
+        private async void TrainNetwork()
         {
             if (network != null)
             {
@@ -147,7 +168,7 @@ namespace NN_Backpropagation
                 }
                 Rtb_Result.AppendText(str);
 
-                network.Train(X_train, Y_train, Global.Alpha, Global.Eps, Global.Epochs, Global.IsShuffled);
+                await Task.Run(() => network.Train(X_train, Y_train, Global.Alpha, Global.Eps, Global.Epochs, Global.IsShuffled));
 
                 str = "Обучение завершено!" + Environment.NewLine;
                 Rtb_Result.AppendText(str);
@@ -283,5 +304,10 @@ namespace NN_Backpropagation
             Global.IsShuffled = Check_IsShuffled.Checked;
         }
         #endregion
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            ReadFilesRR();
+        }
     }
 }

@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\FileRR.cs" />
     <Compile Include="Classes\Global.cs" />
     <Compile Include="Classes\FileExcel.cs" />
     <Compile Include="Classes\Neural Network\Matrix.cs" />
