@@ -21,9 +21,6 @@ namespace NN_Backpropagation
         List<List<double>> ConvertedData = new List<List<double>>();   // Данные конвертированные в числа
         List<FileRR> filesRR = new List<FileRR>();                     // Файлы с RR-интервалами
 
-        double[] MaxValues = null;
-        double[] MinValues = null;
-
         Vector[] X_train = null;
         Vector[] Y_train = null;
         Vector[] X_test = null;
@@ -36,6 +33,7 @@ namespace NN_Backpropagation
             InitializeComponent();
 
             CB_Activation.SelectedIndex = 0;
+            TB_Config.Text = Global.ConfigLayers;
             TB_Alpha.Text = Global.Alpha.ToString();
             TB_Eps.Text = Global.Eps.ToString();
             TB_Epochs.Text = Global.Epochs.ToString();
@@ -67,6 +65,9 @@ namespace NN_Backpropagation
         // Нормализация данных из Excel
         private void NormalizeData()
         {
+            double[] MaxValues = null;
+            double[] MinValues = null;
+
             // Нахождение минимальных и максимальных значений для нормализации данных
             MinValues = new double[Global.NumParamsExcel];
             MaxValues = new double[Global.NumParamsExcel];
@@ -176,7 +177,8 @@ namespace NN_Backpropagation
         // Инициализация нейронной сети
         private void InitNetwork()
         {
-            network = new Network(new int[] { 18, 9, 3, 6 });
+            int[] sizes = Utilities.CreateConfigArray();
+            network = new Network(sizes);
         }
 
         // Обучение нейронной сети
@@ -186,6 +188,8 @@ namespace NN_Backpropagation
             {
                 string str = "Обучение начато..." + Environment.NewLine;
                 str += "Параметры нейросети:" + Environment.NewLine;
+                str += "\tКонфигурация нейросети:" + Environment.NewLine;
+                str += string.Format("\t\t{0} {1} {2}\n", Global.InputSize, Global.ConfigLayers, Global.OutputSize);
                 switch (Global.IndexActivation)
                 {
                     case 0:
@@ -323,6 +327,36 @@ namespace NN_Backpropagation
         private void CB_Activation_SelectedIndexChanged(object sender, EventArgs e)
         {
             Global.IndexActivation = CB_Activation.SelectedIndex;
+        }
+
+        private void TB_Config_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                string[] words = TB_Config.Text.Split(new char[] { ' ', ',', '.', ':', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                for (int i = 0; i < words.Length; i++)
+                {
+                    if (int.Parse(words[i]) == 0)
+                    {
+                        words[i] = "1";
+                    }
+                }
+                Global.ConfigLayers = string.Join(" ", words);
+                TB_Config.Text = Global.ConfigLayers.ToString();
+            }
+            catch
+            {
+                TB_Config.Text = "9 3";
+                Global.ConfigLayers = TB_Config.Text;
+            }
+        }
+
+        private void TB_Config_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!Char.IsDigit(e.KeyChar) && e.KeyChar != Convert.ToChar(8) && e.KeyChar != Convert.ToChar(32))
+            {
+                e.Handled = true;
+            }
         }
 
         private void TB_Alpha_Leave(object sender, EventArgs e)

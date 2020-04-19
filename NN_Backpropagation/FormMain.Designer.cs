@@ -46,6 +46,8 @@
             this.Label_PartTrain = new System.Windows.Forms.Label();
             this.TB_PartTrain = new System.Windows.Forms.TextBox();
             this.Btn_Clear = new System.Windows.Forms.Button();
+            this.Label_Config = new System.Windows.Forms.Label();
+            this.TB_Config = new System.Windows.Forms.TextBox();
             this.ControlPanel.SuspendLayout();
             this.GB_Settings.SuspendLayout();
             this.InfoPanel.SuspendLayout();
@@ -65,6 +67,8 @@
             // 
             // GB_Settings
             // 
+            this.GB_Settings.Controls.Add(this.TB_Config);
+            this.GB_Settings.Controls.Add(this.Label_Config);
             this.GB_Settings.Controls.Add(this.TB_PartTrain);
             this.GB_Settings.Controls.Add(this.Label_PartTrain);
             this.GB_Settings.Controls.Add(this.Check_IsShuffled);
@@ -227,7 +231,7 @@
             // 
             this.Label_PartTrain.AutoSize = true;
             this.Label_PartTrain.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Label_PartTrain.Location = new System.Drawing.Point(298, 90);
+            this.Label_PartTrain.Location = new System.Drawing.Point(298, 145);
             this.Label_PartTrain.Name = "Label_PartTrain";
             this.Label_PartTrain.Size = new System.Drawing.Size(115, 18);
             this.Label_PartTrain.TabIndex = 10;
@@ -236,7 +240,7 @@
             // TB_PartTrain
             // 
             this.TB_PartTrain.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.TB_PartTrain.Location = new System.Drawing.Point(340, 115);
+            this.TB_PartTrain.Location = new System.Drawing.Point(340, 166);
             this.TB_PartTrain.Name = "TB_PartTrain";
             this.TB_PartTrain.Size = new System.Drawing.Size(159, 24);
             this.TB_PartTrain.TabIndex = 11;
@@ -251,6 +255,26 @@
             this.Btn_Clear.Text = "Очистить вывод";
             this.Btn_Clear.UseVisualStyleBackColor = true;
             this.Btn_Clear.Click += new System.EventHandler(this.Btn_Clear_Click);
+            // 
+            // Label_Config
+            // 
+            this.Label_Config.AutoSize = true;
+            this.Label_Config.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.Label_Config.Location = new System.Drawing.Point(298, 90);
+            this.Label_Config.Name = "Label_Config";
+            this.Label_Config.Size = new System.Drawing.Size(113, 18);
+            this.Label_Config.TabIndex = 12;
+            this.Label_Config.Text = "Конфигурация:";
+            // 
+            // TB_Config
+            // 
+            this.TB_Config.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.TB_Config.Location = new System.Drawing.Point(340, 115);
+            this.TB_Config.Name = "TB_Config";
+            this.TB_Config.Size = new System.Drawing.Size(159, 24);
+            this.TB_Config.TabIndex = 13;
+            this.TB_Config.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TB_Config_KeyPress);
+            this.TB_Config.Leave += new System.EventHandler(this.TB_Config_Leave);
             // 
             // FormMain
             // 
@@ -291,6 +315,8 @@
         private System.Windows.Forms.Label Label_PartTrain;
         private System.Windows.Forms.TextBox TB_PartTrain;
         private System.Windows.Forms.Button Btn_Clear;
+        private System.Windows.Forms.TextBox TB_Config;
+        private System.Windows.Forms.Label Label_Config;
     }
 }
 

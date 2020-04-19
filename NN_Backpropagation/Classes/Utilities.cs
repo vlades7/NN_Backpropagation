@@ -172,5 +172,31 @@ namespace NN_Backpropagation.Classes
                 y[j] = buf;
             }
         }
+
+        // Создание массива с конфигурацией нейронной сети
+        public static int[] CreateConfigArray()
+        {
+            int[] sizes = null;
+
+            string[] words = Global.ConfigLayers.Split(' ');
+            int sizeConfig = 2; // 2 - Входной и выходной слой
+            if (Global.ConfigLayers != "")
+            {
+                sizeConfig += words.Length;
+            }
+
+            sizes = new int[sizeConfig];
+            sizes[0] = Global.InputSize;
+            if (Global.ConfigLayers != "")
+            {
+                for (int i = 0; i < words.Length; i++)
+                {
+                    sizes[i + 1] = int.Parse(words[i]);
+                }
+            }
+            sizes[sizeConfig - 1] = Global.OutputSize;
+
+            return sizes;
+        }
     }
 }
