@@ -321,6 +321,7 @@ namespace NN_Backpropagation
         private void Btn_Clear_Click(object sender, EventArgs e)
         {
             Rtb_Result.Clear();
+            Rtb_Result.ScrollToCaret();
         }
 
         #region Настройки нейросети и валидация данных

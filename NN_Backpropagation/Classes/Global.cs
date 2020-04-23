@@ -1,9 +1,14 @@
-﻿namespace NN_Backpropagation.Classes
+﻿using System;
+using System.IO;
+
+namespace NN_Backpropagation.Classes
 {
     public static class Global
     {
-        public const string FilePath = @"C:\Users\Владик\Desktop\NewData3.xlsx";  // Путь к файлу с данными
-        public const string DirPath = @"C:\Users\Владик\Desktop\RR";              // Путь к файлам с ритмами
+        // Путь к файлу с данными
+        public static string FilePath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"..\..\..\Children.xlsx"));
+        // Путь к файлам с ритмами
+        public static string DirPath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"..\..\..\RR_intervals"));
 
         public const int CountRanges = 10;                          // Количество диапазонов
         public const int NumInfoCols = 1;                           // Количество информационных параметров у образа
