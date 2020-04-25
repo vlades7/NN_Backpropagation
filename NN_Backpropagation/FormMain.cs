@@ -258,13 +258,13 @@ namespace NN_Backpropagation
                 TotalAccuracy /= Global.OutputSize;
 
                 string strOutput = "";
-                strOutput += string.Format("Точность - жизнеспособность: {0}\n", Math.Round(Accuracy[0], 6) * 100);
-                strOutput += string.Format("Точность - физическое развитие: {0}\n", Math.Round(Accuracy[1], 6) * 100);
-                strOutput += string.Format("Точность - норма НПР: {0}\n", Math.Round(Accuracy[2], 6) * 100);
-                strOutput += string.Format("Точность - моторика: {0}\n", Math.Round(Accuracy[3], 6) * 100);
-                strOutput += string.Format("Точность - речь: {0}\n", Math.Round(Accuracy[4], 6) * 100);
-                strOutput += string.Format("Точность - моторика и речь: {0}\n\n", Math.Round(Accuracy[5], 6) * 100);
-                strOutput += string.Format("Общая точность: {0}\n", Math.Round(TotalAccuracy, 6) * 100);
+                strOutput += string.Format("Точность - жизнеспособность: {0}%\n", Math.Round(Accuracy[0], 6) * 100);
+                strOutput += string.Format("Точность - физическое развитие: {0}%\n", Math.Round(Accuracy[1], 6) * 100);
+                strOutput += string.Format("Точность - норма НПР: {0}%\n", Math.Round(Accuracy[2], 6) * 100);
+                strOutput += string.Format("Точность - моторика: {0}%\n", Math.Round(Accuracy[3], 6) * 100);
+                strOutput += string.Format("Точность - речь: {0}%\n", Math.Round(Accuracy[4], 6) * 100);
+                strOutput += string.Format("Точность - моторика и речь: {0}%\n\n", Math.Round(Accuracy[5], 6) * 100);
+                strOutput += string.Format("Общая точность: {0}%\n", Math.Round(TotalAccuracy, 6) * 100);
                 Rtb_Result.AppendText(strOutput);
             }
         }
