@@ -33,9 +33,11 @@ namespace NN_Backpropagation
             TB_Eps.Text = Global.Eps.ToString();
             TB_Epochs.Text = Global.Epochs.ToString();
             TB_PartTrain.Text = Global.PartTrain.ToString();
+            TB_IdPatient.Text = Global.IdPatient.ToString();
             Check_IsShuffled.Checked = Global.IsShuffled;
 
             Btn_Test.Enabled = false;
+            Btn_TestOne.Enabled = false;
         }
 
         // Считывание и форматирование данных из Excel
@@ -240,13 +242,6 @@ namespace NN_Backpropagation
                             NumberEqualities[j]++;
                         }
                     }
-
-                    if (Global.PrintLogs)
-                    {
-                        Rtb_Result.AppendText("#" + (i + 1) + Environment.NewLine +
-                            "Calc_Out:" + output.VectorToStr() + Environment.NewLine +
-                            "Real_out:" + Y[i].VectorToStr() + Environment.NewLine + Environment.NewLine);
-                    }
                 }
 
                 for (int i = 0; i < Global.OutputSize; i++)
@@ -265,6 +260,65 @@ namespace NN_Backpropagation
                 strOutput += string.Format("Точность - речь: {0}%\n", Math.Round(Accuracy[4], 6) * 100);
                 strOutput += string.Format("Точность - моторика и речь: {0}%\n\n", Math.Round(Accuracy[5], 6) * 100);
                 strOutput += string.Format("Общая точность: {0}%\n", Math.Round(TotalAccuracy, 6) * 100);
+                Rtb_Result.AppendText(strOutput);
+            }
+        }
+
+        // Прогноз одного пациента
+        private void TestPatient()
+        {
+            if (network != null)
+            {
+                double NumberEqualities = 0;
+                double[] bufX = new double[Global.InputSize];
+                double[] bufY = new double[Global.OutputSize];
+                Vector x;
+                Vector y;
+
+                int index = ConvertedData.FindIndex(a => a[0] == Global.IdPatient);
+                if (index == -1)
+                {
+                    MessageBox.Show("Данный пациент не найден!", "Прогноз не удался", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+                for (int i = 0; i < Global.InputSize; i++)
+                {
+                    bufX[i] = ConvertedData[index][i + Global.NumInfoCols];
+                }
+                x = new Vector(bufX);
+                for (int i = Global.InputSize + Global.NumInfoCols; i < ConvertedData[index].Count; i++)
+                {
+                    bufY[i - Global.InputSize - Global.NumInfoCols] = ConvertedData[index][i];
+                }
+                y = new Vector(bufY);
+
+                Vector output = network.Forward(x);
+                for (int i = 0; i < Global.OutputSize; i++)
+                {
+                    if (Math.Round(output[i]) == y[i])
+                    {
+                        NumberEqualities++;
+                    }
+                }
+
+                string strOutput = "";
+                strOutput += string.Format("Ожидаемые результаты:\n");
+                strOutput += string.Format("Жизнеспособность: {0}\n", Math.Round(output[0]));
+                strOutput += string.Format("Физическое развитие: {0}\n", Math.Round(output[1]));
+                strOutput += string.Format("Норма НПР: {0}\n", Math.Round(output[2]));
+                strOutput += string.Format("Моторика: {0}\n", Math.Round(output[3]));
+                strOutput += string.Format("Речь: {0}\n", Math.Round(output[4]));
+                strOutput += string.Format("Моторика и речь: {0}\n\n", Math.Round(output[5]));
+
+                strOutput += string.Format("Полученные результаты:\n");
+                strOutput += string.Format("Жизнеспособность: {0}\n", y[0]);
+                strOutput += string.Format("Физическое развитие: {0}\n", y[1]);
+                strOutput += string.Format("Норма НПР: {0}\n", y[2]);
+                strOutput += string.Format("Моторика: {0}\n", y[3]);
+                strOutput += string.Format("Речь: {0}\n", y[4]);
+                strOutput += string.Format("Моторика и речь: {0}\n\n", y[5]);
+
+                strOutput += string.Format("Совпадения в {0} позициях из {1}\n", NumberEqualities, Global.OutputSize);
                 Rtb_Result.AppendText(strOutput);
             }
         }
@@ -298,6 +352,7 @@ namespace NN_Backpropagation
             if (network != null)
             {
                 Btn_Test.Enabled = true;
+                Btn_TestOne.Enabled = true;
             }
         }
 
@@ -311,6 +366,11 @@ namespace NN_Backpropagation
             {
                 TestNetwork(X_test, Y_test);
             }
+        }
+
+        private void Btn_TestOne_Click(object sender, EventArgs e)
+        {
+            TestPatient();
         }
 
         private void Btn_Clear_Click(object sender, EventArgs e)
@@ -423,6 +483,24 @@ namespace NN_Backpropagation
             }
         }
 
+        private void TB_IdPatient_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                if (int.Parse(TB_IdPatient.Text) < 0)
+                {
+                    TB_IdPatient.Text = "41";
+                }
+                Global.IdPatient = int.Parse(TB_IdPatient.Text);
+                TB_IdPatient.Text = Global.IdPatient.ToString();
+            }
+            catch
+            {
+                TB_IdPatient.Text = "41";
+                Global.IdPatient = int.Parse(TB_IdPatient.Text);
+            }
+        }
+
         private void Check_IsShuffled_CheckedChanged(object sender, EventArgs e)
         {
             Global.IsShuffled = Check_IsShuffled.Checked;
@@ -433,5 +511,6 @@ namespace NN_Backpropagation
             Rtb_Result.ScrollToCaret();
         }
         #endregion
+
     }
 }

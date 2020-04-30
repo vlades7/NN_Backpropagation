@@ -29,7 +29,15 @@
         private void InitializeComponent()
         {
             this.ControlPanel = new System.Windows.Forms.Panel();
+            this.TB_IdPatient = new System.Windows.Forms.TextBox();
+            this.Label_IdPatient = new System.Windows.Forms.Label();
+            this.Btn_TestOne = new System.Windows.Forms.Button();
+            this.Btn_Clear = new System.Windows.Forms.Button();
             this.GB_Settings = new System.Windows.Forms.GroupBox();
+            this.TB_Config = new System.Windows.Forms.TextBox();
+            this.Label_Config = new System.Windows.Forms.Label();
+            this.TB_PartTrain = new System.Windows.Forms.TextBox();
+            this.Label_PartTrain = new System.Windows.Forms.Label();
             this.Check_IsShuffled = new System.Windows.Forms.CheckBox();
             this.TB_Epochs = new System.Windows.Forms.TextBox();
             this.Label_Epochs = new System.Windows.Forms.Label();
@@ -43,11 +51,6 @@
             this.Btn_Train = new System.Windows.Forms.Button();
             this.InfoPanel = new System.Windows.Forms.Panel();
             this.Rtb_Result = new System.Windows.Forms.RichTextBox();
-            this.Label_PartTrain = new System.Windows.Forms.Label();
-            this.TB_PartTrain = new System.Windows.Forms.TextBox();
-            this.Btn_Clear = new System.Windows.Forms.Button();
-            this.Label_Config = new System.Windows.Forms.Label();
-            this.TB_Config = new System.Windows.Forms.TextBox();
             this.ControlPanel.SuspendLayout();
             this.GB_Settings.SuspendLayout();
             this.InfoPanel.SuspendLayout();
@@ -55,6 +58,9 @@
             // 
             // ControlPanel
             // 
+            this.ControlPanel.Controls.Add(this.TB_IdPatient);
+            this.ControlPanel.Controls.Add(this.Label_IdPatient);
+            this.ControlPanel.Controls.Add(this.Btn_TestOne);
             this.ControlPanel.Controls.Add(this.Btn_Clear);
             this.ControlPanel.Controls.Add(this.GB_Settings);
             this.ControlPanel.Controls.Add(this.Btn_Test);
@@ -64,6 +70,43 @@
             this.ControlPanel.Name = "ControlPanel";
             this.ControlPanel.Size = new System.Drawing.Size(557, 470);
             this.ControlPanel.TabIndex = 0;
+            // 
+            // TB_IdPatient
+            // 
+            this.TB_IdPatient.Location = new System.Drawing.Point(209, 359);
+            this.TB_IdPatient.Name = "TB_IdPatient";
+            this.TB_IdPatient.Size = new System.Drawing.Size(144, 22);
+            this.TB_IdPatient.TabIndex = 9;
+            this.TB_IdPatient.Leave += new System.EventHandler(this.TB_IdPatient_Leave);
+            // 
+            // Label_IdPatient
+            // 
+            this.Label_IdPatient.AutoSize = true;
+            this.Label_IdPatient.Location = new System.Drawing.Point(206, 339);
+            this.Label_IdPatient.Name = "Label_IdPatient";
+            this.Label_IdPatient.Size = new System.Drawing.Size(122, 17);
+            this.Label_IdPatient.TabIndex = 8;
+            this.Label_IdPatient.Text = "Номер пациента:";
+            // 
+            // Btn_TestOne
+            // 
+            this.Btn_TestOne.Location = new System.Drawing.Point(209, 403);
+            this.Btn_TestOne.Name = "Btn_TestOne";
+            this.Btn_TestOne.Size = new System.Drawing.Size(144, 55);
+            this.Btn_TestOne.TabIndex = 7;
+            this.Btn_TestOne.Text = "Прогноз";
+            this.Btn_TestOne.UseVisualStyleBackColor = true;
+            this.Btn_TestOne.Click += new System.EventHandler(this.Btn_TestOne_Click);
+            // 
+            // Btn_Clear
+            // 
+            this.Btn_Clear.Location = new System.Drawing.Point(372, 403);
+            this.Btn_Clear.Name = "Btn_Clear";
+            this.Btn_Clear.Size = new System.Drawing.Size(144, 55);
+            this.Btn_Clear.TabIndex = 6;
+            this.Btn_Clear.Text = "Очистить вывод";
+            this.Btn_Clear.UseVisualStyleBackColor = true;
+            this.Btn_Clear.Click += new System.EventHandler(this.Btn_Clear_Click);
             // 
             // GB_Settings
             // 
@@ -86,6 +129,45 @@
             this.GB_Settings.TabIndex = 5;
             this.GB_Settings.TabStop = false;
             this.GB_Settings.Text = "Настройки нейросети";
+            // 
+            // TB_Config
+            // 
+            this.TB_Config.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.TB_Config.Location = new System.Drawing.Point(340, 115);
+            this.TB_Config.Name = "TB_Config";
+            this.TB_Config.Size = new System.Drawing.Size(159, 24);
+            this.TB_Config.TabIndex = 13;
+            this.TB_Config.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TB_Config_KeyPress);
+            this.TB_Config.Leave += new System.EventHandler(this.TB_Config_Leave);
+            // 
+            // Label_Config
+            // 
+            this.Label_Config.AutoSize = true;
+            this.Label_Config.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.Label_Config.Location = new System.Drawing.Point(298, 90);
+            this.Label_Config.Name = "Label_Config";
+            this.Label_Config.Size = new System.Drawing.Size(113, 18);
+            this.Label_Config.TabIndex = 12;
+            this.Label_Config.Text = "Конфигурация:";
+            // 
+            // TB_PartTrain
+            // 
+            this.TB_PartTrain.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.TB_PartTrain.Location = new System.Drawing.Point(340, 166);
+            this.TB_PartTrain.Name = "TB_PartTrain";
+            this.TB_PartTrain.Size = new System.Drawing.Size(159, 24);
+            this.TB_PartTrain.TabIndex = 11;
+            this.TB_PartTrain.Leave += new System.EventHandler(this.TB_PartTrain_Leave);
+            // 
+            // Label_PartTrain
+            // 
+            this.Label_PartTrain.AutoSize = true;
+            this.Label_PartTrain.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.Label_PartTrain.Location = new System.Drawing.Point(298, 145);
+            this.Label_PartTrain.Name = "Label_PartTrain";
+            this.Label_PartTrain.Size = new System.Drawing.Size(115, 18);
+            this.Label_PartTrain.TabIndex = 10;
+            this.Label_PartTrain.Text = "Доля выборки:";
             // 
             // Check_IsShuffled
             // 
@@ -188,7 +270,7 @@
             this.Btn_Test.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Btn_Test.Location = new System.Drawing.Point(47, 403);
             this.Btn_Test.Name = "Btn_Test";
-            this.Btn_Test.Size = new System.Drawing.Size(198, 42);
+            this.Btn_Test.Size = new System.Drawing.Size(144, 55);
             this.Btn_Test.TabIndex = 4;
             this.Btn_Test.Text = "Тестирование сети";
             this.Btn_Test.UseVisualStyleBackColor = true;
@@ -197,9 +279,9 @@
             // Btn_Train
             // 
             this.Btn_Train.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Btn_Train.Location = new System.Drawing.Point(47, 355);
+            this.Btn_Train.Location = new System.Drawing.Point(47, 339);
             this.Btn_Train.Name = "Btn_Train";
-            this.Btn_Train.Size = new System.Drawing.Size(198, 42);
+            this.Btn_Train.Size = new System.Drawing.Size(144, 55);
             this.Btn_Train.TabIndex = 3;
             this.Btn_Train.Text = "Обучить нейросеть";
             this.Btn_Train.UseVisualStyleBackColor = true;
@@ -227,55 +309,6 @@
             this.Rtb_Result.Text = "";
             this.Rtb_Result.TextChanged += new System.EventHandler(this.Rtb_Result_TextChanged);
             // 
-            // Label_PartTrain
-            // 
-            this.Label_PartTrain.AutoSize = true;
-            this.Label_PartTrain.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Label_PartTrain.Location = new System.Drawing.Point(298, 145);
-            this.Label_PartTrain.Name = "Label_PartTrain";
-            this.Label_PartTrain.Size = new System.Drawing.Size(115, 18);
-            this.Label_PartTrain.TabIndex = 10;
-            this.Label_PartTrain.Text = "Доля выборки:";
-            // 
-            // TB_PartTrain
-            // 
-            this.TB_PartTrain.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.TB_PartTrain.Location = new System.Drawing.Point(340, 166);
-            this.TB_PartTrain.Name = "TB_PartTrain";
-            this.TB_PartTrain.Size = new System.Drawing.Size(159, 24);
-            this.TB_PartTrain.TabIndex = 11;
-            this.TB_PartTrain.Leave += new System.EventHandler(this.TB_PartTrain_Leave);
-            // 
-            // Btn_Clear
-            // 
-            this.Btn_Clear.Location = new System.Drawing.Point(330, 355);
-            this.Btn_Clear.Name = "Btn_Clear";
-            this.Btn_Clear.Size = new System.Drawing.Size(198, 42);
-            this.Btn_Clear.TabIndex = 6;
-            this.Btn_Clear.Text = "Очистить вывод";
-            this.Btn_Clear.UseVisualStyleBackColor = true;
-            this.Btn_Clear.Click += new System.EventHandler(this.Btn_Clear_Click);
-            // 
-            // Label_Config
-            // 
-            this.Label_Config.AutoSize = true;
-            this.Label_Config.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Label_Config.Location = new System.Drawing.Point(298, 90);
-            this.Label_Config.Name = "Label_Config";
-            this.Label_Config.Size = new System.Drawing.Size(113, 18);
-            this.Label_Config.TabIndex = 12;
-            this.Label_Config.Text = "Конфигурация:";
-            // 
-            // TB_Config
-            // 
-            this.TB_Config.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.TB_Config.Location = new System.Drawing.Point(340, 115);
-            this.TB_Config.Name = "TB_Config";
-            this.TB_Config.Size = new System.Drawing.Size(159, 24);
-            this.TB_Config.TabIndex = 13;
-            this.TB_Config.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TB_Config_KeyPress);
-            this.TB_Config.Leave += new System.EventHandler(this.TB_Config_Leave);
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -288,6 +321,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Нейронная сеть - Обратное распространение ошибки";
             this.ControlPanel.ResumeLayout(false);
+            this.ControlPanel.PerformLayout();
             this.GB_Settings.ResumeLayout(false);
             this.GB_Settings.PerformLayout();
             this.InfoPanel.ResumeLayout(false);
@@ -317,6 +351,9 @@
         private System.Windows.Forms.Button Btn_Clear;
         private System.Windows.Forms.TextBox TB_Config;
         private System.Windows.Forms.Label Label_Config;
+        private System.Windows.Forms.TextBox TB_IdPatient;
+        private System.Windows.Forms.Label Label_IdPatient;
+        private System.Windows.Forms.Button Btn_TestOne;
     }
 }
 
