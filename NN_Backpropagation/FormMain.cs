@@ -259,7 +259,7 @@ namespace NN_Backpropagation
                 strOutput += string.Format("Точность - моторика: {0}%\n", Math.Round(Accuracy[3], 6) * 100);
                 strOutput += string.Format("Точность - речь: {0}%\n", Math.Round(Accuracy[4], 6) * 100);
                 strOutput += string.Format("Точность - моторика и речь: {0}%\n\n", Math.Round(Accuracy[5], 6) * 100);
-                strOutput += string.Format("Общая точность: {0}%\n", Math.Round(TotalAccuracy, 6) * 100);
+                strOutput += string.Format("Общая точность: {0}%\n\n", Math.Round(TotalAccuracy, 6) * 100);
                 Rtb_Result.AppendText(strOutput);
             }
         }
@@ -269,7 +269,6 @@ namespace NN_Backpropagation
         {
             if (network != null)
             {
-                double NumberEqualities = 0;
                 double[] bufX = new double[Global.InputSize];
                 double[] bufY = new double[Global.OutputSize];
                 Vector x;
@@ -293,32 +292,36 @@ namespace NN_Backpropagation
                 y = new Vector(bufY);
 
                 Vector output = network.Forward(x);
-                for (int i = 0; i < Global.OutputSize; i++)
+                string[] answers = new string[output.length];
+
+                if (Math.Round(output[0]) == y[0])
+                {
+                    answers[0] = "Живой";
+                }
+                else
+                {
+                    answers[0] = "Летальный исход";
+                }
+                for (int i = 1; i < Global.OutputSize; i++)
                 {
                     if (Math.Round(output[i]) == y[i])
                     {
-                        NumberEqualities++;
+                        answers[i] = "Норма";
+                    }
+                    else
+                    {
+                        answers[i] = "Задержка";
                     }
                 }
 
                 string strOutput = "";
-                strOutput += string.Format("Ожидаемые результаты:\n");
-                strOutput += string.Format("Жизнеспособность: {0}\n", Math.Round(output[0]));
-                strOutput += string.Format("Физическое развитие: {0}\n", Math.Round(output[1]));
-                strOutput += string.Format("Норма НПР: {0}\n", Math.Round(output[2]));
-                strOutput += string.Format("Моторика: {0}\n", Math.Round(output[3]));
-                strOutput += string.Format("Речь: {0}\n", Math.Round(output[4]));
-                strOutput += string.Format("Моторика и речь: {0}\n\n", Math.Round(output[5]));
-
-                strOutput += string.Format("Полученные результаты:\n");
-                strOutput += string.Format("Жизнеспособность: {0}\n", y[0]);
-                strOutput += string.Format("Физическое развитие: {0}\n", y[1]);
-                strOutput += string.Format("Норма НПР: {0}\n", y[2]);
-                strOutput += string.Format("Моторика: {0}\n", y[3]);
-                strOutput += string.Format("Речь: {0}\n", y[4]);
-                strOutput += string.Format("Моторика и речь: {0}\n\n", y[5]);
-
-                strOutput += string.Format("Совпадения в {0} позициях из {1}\n", NumberEqualities, Global.OutputSize);
+                strOutput += string.Format("Полученные результаты №{0}:\n", Global.IdPatient);
+                strOutput += string.Format("Жизнеспособность: {0}\n", answers[0]);
+                strOutput += string.Format("Физическое развитие: {0}\n", answers[1]);
+                strOutput += string.Format("Норма НПР: {0}\n", answers[2]);
+                strOutput += string.Format("Моторика: {0}\n", answers[3]);
+                strOutput += string.Format("Речь: {0}\n", answers[4]);
+                strOutput += string.Format("Моторика и речь: {0}\n\n", answers[5]);
                 Rtb_Result.AppendText(strOutput);
             }
         }
@@ -376,6 +379,8 @@ namespace NN_Backpropagation
         private void Btn_Clear_Click(object sender, EventArgs e)
         {
             Rtb_Result.Clear();
+            Rtb_Result.ScrollBars = RichTextBoxScrollBars.None;
+            Rtb_Result.ScrollBars = RichTextBoxScrollBars.Vertical;
             Rtb_Result.ScrollToCaret();
         }
 
