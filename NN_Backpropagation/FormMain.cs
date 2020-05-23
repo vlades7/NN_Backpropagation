@@ -270,9 +270,7 @@ namespace NN_Backpropagation
             if (network != null)
             {
                 double[] bufX = new double[Global.InputSize];
-                double[] bufY = new double[Global.OutputSize];
                 Vector x;
-                Vector y;
 
                 int index = ConvertedData.FindIndex(a => a[0] == Global.IdPatient);
                 if (index == -1)
@@ -280,48 +278,53 @@ namespace NN_Backpropagation
                     MessageBox.Show("Данный пациент не найден!", "Прогноз не удался", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
+
                 for (int i = 0; i < Global.InputSize; i++)
                 {
                     bufX[i] = ConvertedData[index][i + Global.NumInfoCols];
                 }
                 x = new Vector(bufX);
-                for (int i = Global.InputSize + Global.NumInfoCols; i < ConvertedData[index].Count; i++)
-                {
-                    bufY[i - Global.InputSize - Global.NumInfoCols] = ConvertedData[index][i];
-                }
-                y = new Vector(bufY);
 
                 Vector output = network.Forward(x);
                 string[] answers = new string[output.length];
 
-                if (Math.Round(output[0]) == y[0])
+                if (Math.Round(output[0]) == 1)
                 {
                     answers[0] = "Живой";
+                    if (Math.Round(output[1]) == 1)
+                    {
+                        answers[1] = "Норма";
+                    }
+                    else
+                    {
+                        answers[1] = "Задержка";
+                    }
+                    if (Math.Round(output[2]) == 1)
+                    {
+                        answers[2] = "Норма";
+                    }
+                    for (int i = 3; i < Global.OutputSize; i++)
+                    {
+                        if (Math.Round(output[i]) == 1)
+                        {
+                            answers[i] = "Задержка";
+                        }
+                    }
                 }
                 else
                 {
                     answers[0] = "Летальный исход";
                 }
-                for (int i = 1; i < Global.OutputSize; i++)
-                {
-                    if (Math.Round(output[i]) == y[i])
-                    {
-                        answers[i] = "Норма";
-                    }
-                    else
-                    {
-                        answers[i] = "Задержка";
-                    }
-                }
 
                 string strOutput = "";
                 strOutput += string.Format("Полученные результаты №{0}:\n", Global.IdPatient);
                 strOutput += string.Format("Жизнеспособность: {0}\n", answers[0]);
-                strOutput += string.Format("Физическое развитие: {0}\n", answers[1]);
-                strOutput += string.Format("Норма НПР: {0}\n", answers[2]);
-                strOutput += string.Format("Моторика: {0}\n", answers[3]);
-                strOutput += string.Format("Речь: {0}\n", answers[4]);
-                strOutput += string.Format("Моторика и речь: {0}\n\n", answers[5]);
+                strOutput += (answers[1] != null) ? string.Format("Физическое развитие: {0}\n", answers[1]) : "";
+                strOutput += (answers[2] != null) ? string.Format("Норма НПР: {0}\n", answers[2]) : "";
+                strOutput += (answers[3] != null) ? string.Format("Моторика: {0}\n", answers[3]) : "";
+                strOutput += (answers[4] != null) ? string.Format("Речь: {0}\n", answers[4]) : "";
+                strOutput += (answers[5] != null) ? string.Format("Моторика и речь: {0}\n", answers[5]) : "";
+                strOutput += Environment.NewLine;
                 Rtb_Result.AppendText(strOutput);
             }
         }
