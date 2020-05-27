@@ -22,7 +22,6 @@ namespace NN_Backpropagation.Classes
         public const int OutputSize = 6;                            // Количество нейронов на выходном слое
 
         public const bool IsHeadDeleted = true;                     // True - если в файле есть строка с заголовками
-        public const bool DeleteFirstStr = true;                    // True - если не считывать первую строку файла
 
         public static string ConfigLayers = "10 5 6";               // Конфигурация нейронной сети (скрытые слои)
         public static double PartTrain = 1.0;                       // Доля обучающей выборки [0, 1]
