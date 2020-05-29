@@ -27,7 +27,6 @@ namespace NN_Backpropagation
         {
             InitializeComponent();
 
-            CB_Activation.SelectedIndex = 0;
             TB_Config.Text = Global.ConfigLayers;
             TB_Alpha.Text = Global.Alpha.ToString();
             TB_Eps.Text = Global.Eps.ToString();
@@ -187,21 +186,7 @@ namespace NN_Backpropagation
                 str += "Параметры нейросети:" + Environment.NewLine;
                 str += "\tКонфигурация нейросети:" + Environment.NewLine;
                 str += string.Format("\t\t{0} {1} {2}\n", Global.InputSize, Global.ConfigLayers, Global.OutputSize);
-                switch (Global.IndexActivation)
-                {
-                    case 0:
-                        str += "\tФункция активации: сигмоидальная функция" + Environment.NewLine;
-                        break;
-                    case 1:
-                        str += "\tФункция активации: гиперболический тангенс" + Environment.NewLine;
-                        break;
-                    case 2:
-                        str += "\tФункция активации: ReLU" + Environment.NewLine;
-                        break;
-                    default:
-                        str += "\tФункция активации: сигмоидальная функция" + Environment.NewLine; ;
-                        break;
-                }
+                str += "\tФункция активации: сигмоидальная функция" + Environment.NewLine;
                 str += "\tСкорость обучения: " + Global.Alpha + Environment.NewLine;
                 str += "\tТочность нейросети: " + Global.Eps + Environment.NewLine;
                 str += "\tКоличество эпох: " + Global.Epochs + Environment.NewLine;
@@ -332,12 +317,19 @@ namespace NN_Backpropagation
         private async void Btn_Train_Click(object sender, EventArgs e)
         {
             Btn_Train.Enabled = false;
+            Btn_Test.Enabled = false;
+            Btn_TestOne.Enabled = false;
 
             await Task.Run(() => ReadAndFormatData());
 
             if (ConvertedData.Count == 0)
             {
                 Btn_Train.Enabled = true;
+                if (network != null)
+                {
+                    Btn_Test.Enabled = true;
+                    Btn_TestOne.Enabled = true;
+                }
                 return;
             }
 
@@ -355,11 +347,8 @@ namespace NN_Backpropagation
             TrainNetwork();
 
             Btn_Train.Enabled = true;
-            if (network != null)
-            {
-                Btn_Test.Enabled = true;
-                Btn_TestOne.Enabled = true;
-            }
+            Btn_Test.Enabled = true;
+            Btn_TestOne.Enabled = true;
         }
 
         private void Btn_Test_Click(object sender, EventArgs e)
@@ -388,11 +377,6 @@ namespace NN_Backpropagation
         }
 
         #region Настройки нейросети и валидация данных
-        private void CB_Activation_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Global.IndexActivation = CB_Activation.SelectedIndex;
-        }
-
         private void TB_Config_Leave(object sender, EventArgs e)
         {
             try
