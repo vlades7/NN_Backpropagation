@@ -23,7 +23,7 @@ namespace NN_Backpropagation.Classes
 
         public const bool IsHeadDeleted = true;                     // True - если в файле есть строка с заголовками
 
-        public static string ConfigLayers = "10 5 6";               // Конфигурация нейронной сети (скрытые слои)
+        public static string ConfigLayers = "8 4";                  // Конфигурация нейронной сети (скрытые слои)
         public static double PartTrain = 1.0;                       // Доля обучающей выборки [0, 1]
         public static double Alpha = 0.5;                           // Скорость обучения
         public static double Eps = 1e-7;                            // Точность

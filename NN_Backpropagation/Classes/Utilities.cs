@@ -7,7 +7,10 @@ namespace NN_Backpropagation.Classes
 {
     static public class Utilities
     {
-        // Преобразование строки Дня Рождения в формат DateTime
+        /// <summary>
+        ///   Преобразование строки Дня Рождения в формат DateTime
+        /// </summary>
+        /// <param name = "userString">Строка для преобразования</param>
         public static DateTime UserStringToDateTime(string userString)
         {
             string[] args = userString.Split('.');
@@ -18,13 +21,27 @@ namespace NN_Backpropagation.Classes
             return DateTime.MinValue;
         }
 
-        // Нормализация одного значения
+        /// <summary>
+        ///   Нормализация одного значения
+        /// </summary>
+        /// <param name = "value">Значение для нормализации</param>
+        /// <param name = "inputLow">Нижнее значение текущего интервала</param>
+        /// <param name = "inputHigh">Верхнее значение текущего интервала</param>
+        /// <param name = "outputLow">Нижнее значение ожидаемого интервала</param>
+        /// <param name = "outputHigh">Верхнее значение ожидаемого интервала</param>
         public static double Normalize(double value, double inputLow, double inputHigh, double outputLow = 0.0, double outputHigh = 1.0)
         {
             return (value - inputLow) * (outputHigh - outputLow) / (inputHigh - inputLow) + outputLow;
         }
 
-        // Нормализация массива значений
+        /// <summary>
+        ///   Нормализация массива значений
+        /// </summary>
+        /// <param name = "values">Массив для нормализации</param>
+        /// <param name = "inputLow">Массив из нижних значений текущих интервалов</param>
+        /// <param name = "inputHigh">Массив из верхних значение текущих интервалов</param>
+        /// <param name = "outputLow">Нижнее значение ожидаемого интервала</param>
+        /// <param name = "outputHigh">Верхнее значение ожидаемого интервала</param>
         public static double[] NormalizeArray(double[] values, double[] inputLow, double[] inputHigh, double outputLow = 0.0, double outputHigh = 1.0)
         {
             double[] arr = new double[values.Length];
@@ -35,13 +52,27 @@ namespace NN_Backpropagation.Classes
             return arr;
         }
 
-        // Денормализация одного значения
+        /// <summary>
+        ///   Денормализация одного значения
+        /// </summary>
+        /// <param name = "value">Значение для денормализации</param>
+        /// <param name = "outputLow">Нижнее значение текущего интервала</param>
+        /// <param name = "outputHigh">Верхнее значение текущего интервал</param>
+        /// <param name = "inputLow">Нижнее значение ожидаемого интервала</param>
+        /// <param name = "inputHigh">Верхнее значение ожидаемого интервала</param>
         public static double Denormalize(double value, double outputLow, double outputHigh, double inputLow = 0.0, double inputHigh = 1.0)
         {
             return ((outputLow - outputHigh) * value - inputHigh * outputLow + outputHigh * inputLow) / (inputLow - inputHigh);
         }
 
-        // Денормализация массива значений
+        /// <summary>
+        ///   Денормализация массива значений
+        /// </summary>
+        /// <param name = "values">Массив для денормализации</param>
+        /// <param name = "outputLow">Массив из нижних значений текущих интервалов</param>
+        /// <param name = "outputHigh">Массив из верхних значений текущих интервалов</param>
+        /// <param name = "inputLow">Нижнее значение ожидаемого интервала</param>
+        /// <param name = "inputHigh">Верхнее значение ожидаемого интервала</param>
         public static double[] DenormalizeArray(double[] values, double[] outputLow, double[] outputHigh, double inputLow = 0.0, double inputHigh = 1.0)
         {
             double[] arr = new double[values.Length];
@@ -52,7 +83,12 @@ namespace NN_Backpropagation.Classes
             return arr;
         }
 
-        // Поиск минимальных значений во всех колонках
+        /// <summary>
+        ///   Поиск минимальных значений во всех колонках
+        /// </summary>
+        /// <param name = "data">Набор данных для поиска</param>
+        /// <param name = "size">Количество столбцов</param>
+        /// <param name = "from">Номер столбца, с которого начать поиск</param>
         public static double[] MinValuesArray(List<List<double>> data, int size, int from)
         {
             try
@@ -71,7 +107,12 @@ namespace NN_Backpropagation.Classes
             }
         }
 
-        // Поиск максимальных значений во всех колонках
+        /// <summary>
+        ///   Поиск максимальных значений во всех колонках
+        /// </summary>
+        /// <param name = "data">Набор данных для поиска</param>
+        /// <param name = "size">Количество столбцов</param>
+        /// <param name = "from">Номер столбца, с которого начать поиск</param>
         public static double[] MaxValuesArray(List<List<double>> data, int size, int from)
         {
             try
@@ -90,7 +131,11 @@ namespace NN_Backpropagation.Classes
             }
         }
 
-        // Поиск минимального значения в i-ой колонке
+        /// <summary>
+        ///   Поиск минимального значения в i-ой колонке
+        /// </summary>
+        /// <param name = "data">Набор данных для поиска</param>
+        /// <param name = "index">Номер столбца для поиска</param>
         private static double MinValueColumn(List<List<double>> data, int index)
         {
             try
@@ -111,7 +156,11 @@ namespace NN_Backpropagation.Classes
             }
         }
 
-        // Поиск максимального значения в i-ой колонке
+        /// <summary>
+        ///   Поиск максимального значения в i-ой колонке
+        /// </summary>
+        /// <param name = "data">Набор данных для поиска</param>
+        /// <param name = "index">Номер столбца для поиска</param>
         private static double MaxValueColumn(List<List<double>> data, int index)
         {
             try
@@ -132,7 +181,13 @@ namespace NN_Backpropagation.Classes
             }
         }
 
-        // Форматирование данных с удалением столбцов с указанной позиции и возможностью удаления заголовка
+        /// <summary>
+        ///   Форматирование данных
+        /// </summary>
+        /// <param name = "data">Набор данных для форматирования</param>
+        /// <param name = "head">True, если имеется заголовок</param>
+        /// <param name = "from">Номер позиции, с которой происходит удаление столбцов</param>
+        /// <param name = "count">Количество для удаления столбцов</param>
         public static void FormatData(ref List<List<string>> data, bool head, int from, int count)
         {
             if (head)
@@ -146,13 +201,20 @@ namespace NN_Backpropagation.Classes
             }
         }
 
-        // Перевод набора данных из string в double
+        /// <summary>
+        ///   Перевод набора данных из string в double
+        /// </summary>
+        /// <param name = "data">Набор данных для конвертирования</param>
         public static List<List<double>> DataStringToDouble(List<List<string>> data) {
             List<List<double>> doubleData = data.Select(x => x.Select(y => double.Parse(y)).ToList()).ToList();
             return doubleData;
         }
 
-        // Перетасовка векторов
+        /// <summary>
+        ///   Перетасовка векторов
+        /// </summary>
+        /// <param name = "x">Массив векторов с входными данными</param>
+        /// <param name = "y">Массив векторов с ожидаемыми данными</param>
         public static void ShuffleVectors(Vector[] x, Vector[] y)
         {
             int j = 0;
@@ -173,7 +235,9 @@ namespace NN_Backpropagation.Classes
             }
         }
 
-        // Создание массива с конфигурацией нейронной сети
+        /// <summary>
+        ///   Создание массива с конфигурацией нейронной сети
+        /// </summary>
         public static int[] CreateConfigArray()
         {
             int[] sizes = null;
@@ -197,6 +261,25 @@ namespace NN_Backpropagation.Classes
             sizes[sizeConfig - 1] = Global.OutputSize;
 
             return sizes;
+        }
+
+        /// <summary>
+        ///   Генерирует нормально распределённые числа
+        /// </summary>
+        /// <param name="rand"></param>
+        /// <param name = "mu">Математическое ожидание</param>
+        /// <param name = "sigma">Среднеквадратичное отклонение</param>
+        public static double NextGaussian(this Random r, double mu = 0, double sigma = 1)
+        {
+            var a = 1.0 - r.NextDouble();
+            var b = 1.0 - r.NextDouble();
+
+            var rand_std_normal = Math.Sqrt(-2.0 * Math.Log(a)) *
+                                Math.Sin(2.0 * Math.PI * b);
+
+            var rand_normal = mu + sigma * rand_std_normal;
+
+            return rand_normal;
         }
     }
 }

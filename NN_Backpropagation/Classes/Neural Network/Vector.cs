@@ -26,18 +26,6 @@ namespace NN_Backpropagation.Classes
             }
         }
 
-        // Значения вектора в строку
-        public string VectorToStr(int round = 0, string separator = " ")
-        {
-            string str = "";
-            for (int i = 0; i < length - 1; i++)
-            {
-                str += Math.Round(this[i], round) + separator;
-            }
-            str += Math.Round(this[length - 1], round);
-            return str;
-        }
-
         // Обращение по индексу
         public double this[int i]
         {

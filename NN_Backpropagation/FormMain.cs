@@ -127,7 +127,7 @@ namespace NN_Backpropagation
             double[] bufX = new double[Global.InputSize];
             double[] bufY = new double[Global.OutputSize];
 
-            // Создание обучающей выборки и её нормализация
+            // Создание обучающей выборки
             for (int i = 0; i < TrainSize; i++)
             {
                 for (int j = 0; j < Global.InputSize; j++)
@@ -153,7 +153,7 @@ namespace NN_Backpropagation
             double[] bufX = new double[Global.InputSize];
             double[] bufY = new double[Global.OutputSize];
 
-            // Создание тестовой выборки и её нормализация
+            // Создание тестовой выборки
             for (int i = TrainSize; i < ConvertedData.Count; i++)
             {
                 for (int j = 0; j < Global.InputSize; j++)
@@ -305,7 +305,7 @@ namespace NN_Backpropagation
                 strOutput += string.Format("Полученные результаты №{0}:\n", Global.IdPatient);
                 strOutput += string.Format("Жизнеспособность: {0}\n", answers[0]);
                 strOutput += (answers[1] != null) ? string.Format("Физическое развитие: {0}\n", answers[1]) : "";
-                strOutput += (answers[2] != null) ? string.Format("Норма НПР: {0}\n", answers[2]) : "";
+                strOutput += (answers[2] != null) ? string.Format("Нервно-психологическое развитие: {0}\n", answers[2]) : "";
                 strOutput += (answers[3] != null) ? string.Format("Моторика: {0}\n", answers[3]) : "";
                 strOutput += (answers[4] != null) ? string.Format("Речь: {0}\n", answers[4]) : "";
                 strOutput += (answers[5] != null) ? string.Format("Моторика и речь: {0}\n", answers[5]) : "";
@@ -394,7 +394,7 @@ namespace NN_Backpropagation
             }
             catch
             {
-                TB_Config.Text = "9 3";
+                TB_Config.Text = "8 4";
                 Global.ConfigLayers = TB_Config.Text;
             }
         }

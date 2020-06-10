@@ -10,8 +10,8 @@ namespace NN_Backpropagation.Classes
         public int Id { get; set; }       // Id, который связывает ребенка и файл
         public int Length { get; set; }   // Количество значений
 
-        public int MinCount { get; set; }      // Минимальное возможное кол-во вхождений в диапозон
-        public int MaxCount { get; set; }      // Максимальное возможное кол-во вхождений в диапозон
+        public int MinCount { get; set; }      // Минимальное возможное кол-во вхождений в диапазон
+        public int MaxCount { get; set; }      // Максимальное возможное кол-во вхождений в диапазон
         public int MinValue { get; set; }      // Минимальное значение
         public int MaxValue { get; set; }      // Максимальное значение
 

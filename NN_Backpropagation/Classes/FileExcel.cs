@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace NN_Backpropagation.Classes

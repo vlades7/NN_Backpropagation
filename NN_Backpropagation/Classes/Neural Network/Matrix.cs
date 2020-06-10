@@ -5,21 +5,21 @@ namespace NN_Backpropagation.Classes
     class Matrix
     {
         private double[][] values; // Значения матрицы
-        public int cols, rows; // Кол-во строк и столбцов
+        public int rows, cols; // Кол-во строк и столбцов
 
-        // Создание матрицы заданного размера и заполнение случайными числами из интервала (-0.5, 0.5)
-        public Matrix(int cols, int rows, Random rand)
+        // Создание матрицы заданного размера и заполнение по методу Ксавье
+        public Matrix(int rows, int cols, Random rand)
         {
-            this.cols = cols;
             this.rows = rows;
+            this.cols = cols;
 
-            values = new double[cols][];
-            for (int i = 0; i < cols; i++)
+            values = new double[rows][];
+            for (int i = 0; i < rows; i++)
             {
-                values[i] = new double[rows];
-                for (int j = 0; j < rows; j++)
+                values[i] = new double[cols];
+                for (int j = 0; j < cols; j++)
                 {
-                    values[i][j] = 2 * rand.NextDouble() - 1.0; // Заполняем случайными числами
+                    values[i][j] = rand.NextGaussian() * Math.Sqrt(2.0 / (rows + cols)); // Заполняем случайными числами
                 }
             }
         }

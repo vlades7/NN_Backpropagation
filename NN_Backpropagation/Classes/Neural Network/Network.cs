@@ -61,11 +61,11 @@ namespace NN_Backpropagation.Classes
                     }
                 }
 
-                for (int i = 0; i < weights[k].cols; i++)
+                for (int i = 0; i < weights[k].rows; i++)
                 {
                     double y = 0; // Неактивированный выход нейрона
 
-                    for (int j = 0; j < weights[k].rows; j++)
+                    for (int j = 0; j < weights[k].cols; j++)
                     {
                         y += weights[k][i, j] * L[k].x[j];
                     }
@@ -91,6 +91,7 @@ namespace NN_Backpropagation.Classes
                 double e = L[last].z[i] - output[i]; // Находим разность значений векторов
 
                 deltas[last][i] = e * L[last].df[i]; // Запоминаем дельту
+
                 error += e * e; // Расчет ошибки по MSE (Mean Squared Error)
             }
             error /= output.length;
@@ -98,10 +99,10 @@ namespace NN_Backpropagation.Classes
             // Вычисляем каждую предыдущую дельту на основе текущей с помощью умножения на транспонированную матрицу
             for (int k = last; k > 0; k--)
             {
-                for (int i = 0; i < weights[k].rows; i++)
+                for (int i = 0; i < weights[k].cols; i++)
                 {
                     deltas[k - 1][i] = 0;
-                    for (int j = 0; j < weights[k].cols; j++)
+                    for (int j = 0; j < weights[k].rows; j++)
                     {
                         deltas[k - 1][i] += weights[k][j, i] * deltas[k][j];
                     }
@@ -115,9 +116,9 @@ namespace NN_Backpropagation.Classes
         {
             for (int k = 0; k < layersN; k++)
             {
-                for (int i = 0; i < weights[k].cols; i++)
+                for (int i = 0; i < weights[k].rows; i++)
                 {
-                    for (int j = 0; j < weights[k].rows; j++)
+                    for (int j = 0; j < weights[k].cols; j++)
                     {
                         weights[k][i, j] -= alpha * deltas[k][i] * L[k].x[j];
                     }
