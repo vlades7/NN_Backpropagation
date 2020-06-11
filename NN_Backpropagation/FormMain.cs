@@ -10,7 +10,8 @@ namespace NN_Backpropagation
 {
     public partial class FormMain : Form
     {
-        int TrainSize; // Размер обучающей выборки
+        int TrainSize;       // Размер обучающей выборки
+        double TimeTraining; // Время обучения
 
         List<List<string>> DataFromFile = new List<List<string>>();    // Данные считанные из файла
         List<List<double>> ConvertedData = new List<List<double>>();   // Данные конвертированные в числа
@@ -34,6 +35,7 @@ namespace NN_Backpropagation
             TB_PartTrain.Text = Global.PartTrain.ToString();
             TB_IdPatient.Text = Global.IdPatient.ToString();
             Check_IsShuffled.Checked = Global.IsShuffled;
+            Check_IsParallel.Checked = Global.IsParallel;
 
             Btn_Test.Enabled = false;
             Btn_TestOne.Enabled = false;
@@ -199,11 +201,19 @@ namespace NN_Backpropagation
                 {
                     str += "\tПеретасовка векторов не выбрана" + Environment.NewLine;
                 }
+                if (Global.IsParallel)
+                {
+                    str += "\tПараллельный режим" + Environment.NewLine;
+                }
+                else
+                {
+                    str += "\tПоследовательный режим" + Environment.NewLine;
+                }
                 Rtb_Result.AppendText(str);
 
-                await Task.Run(() => network.Train(X_train, Y_train, Global.Alpha, Global.Eps, Global.Epochs, Global.IsShuffled));
+                await Task.Run(() => network.Train(X_train, Y_train, Global.Alpha, Global.Eps, Global.Epochs, Global.IsShuffled, ref TimeTraining));
 
-                str = "Обучение завершено!" + Environment.NewLine + Environment.NewLine;
+                str = "Обучение завершено! Время выполнения: " + TimeTraining + " сек"+ Environment.NewLine + Environment.NewLine;
                 Rtb_Result.AppendText(str);
             }
         }
@@ -496,6 +506,11 @@ namespace NN_Backpropagation
         private void Check_IsShuffled_CheckedChanged(object sender, EventArgs e)
         {
             Global.IsShuffled = Check_IsShuffled.Checked;
+        }
+
+        private void Check_IsParallel_CheckedChanged(object sender, EventArgs e)
+        {
+            Global.IsParallel = Check_IsParallel.Checked;
         }
 
         private void Rtb_Result_TextChanged(object sender, EventArgs e)

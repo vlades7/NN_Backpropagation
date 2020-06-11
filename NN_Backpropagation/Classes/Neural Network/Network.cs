@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace NN_Backpropagation.Classes
 {
@@ -61,18 +63,36 @@ namespace NN_Backpropagation.Classes
                     }
                 }
 
-                for (int i = 0; i < weights[k].rows; i++)
+                if (Global.IsParallel)
                 {
-                    double y = 0; // Неактивированный выход нейрона
-
-                    for (int j = 0; j < weights[k].cols; j++)
+                    Parallel.For(0, weights[k].rows, i =>
                     {
-                        y += weights[k][i, j] * L[k].x[j];
-                    }
+                        double y = 0; // Неактивированный выход нейрона
+                        for (int j = 0; j < weights[k].cols; j++)
+                        {
+                            y += weights[k][i, j] * L[k].x[j];
+                        }
 
-                    // Сигмоидальная функция
-                    L[k].z[i] = 1 / (1 + Math.Exp(-y));
-                    L[k].df[i] = L[k].z[i] * (1 - L[k].z[i]);
+                        // Сигмоидальная функция
+                        L[k].z[i] = 1 / (1 + Math.Exp(-y));
+                        L[k].df[i] = L[k].z[i] * (1 - L[k].z[i]);
+                    });
+                }
+                else
+                {
+                    for (int i = 0; i < weights[k].rows; i++)
+                    {
+                        double y = 0; // Неактивированный выход нейрона
+
+                        for (int j = 0; j < weights[k].cols; j++)
+                        {
+                            y += weights[k][i, j] * L[k].x[j];
+                        }
+
+                        // Сигмоидальная функция
+                        L[k].z[i] = 1 / (1 + Math.Exp(-y));
+                        L[k].df[i] = L[k].z[i] * (1 - L[k].z[i]);
+                    }
                 }
             }
 
@@ -114,27 +134,46 @@ namespace NN_Backpropagation.Classes
         // Обновление весовых коэффициентов, alpha - скорость обучения
         void UpdateWeights(double alpha)
         {
-            for (int k = 0; k < layersN; k++)
+            if (Global.IsParallel)
             {
-                for (int i = 0; i < weights[k].rows; i++)
+                Parallel.For(0, layersN, k =>
                 {
-                    for (int j = 0; j < weights[k].cols; j++)
+                    for (int i = 0; i < weights[k].rows; i++)
                     {
-                        weights[k][i, j] -= alpha * deltas[k][i] * L[k].x[j];
+                        for (int j = 0; j < weights[k].cols; j++)
+                        {
+                            weights[k][i, j] -= alpha * deltas[k][i] * L[k].x[j];
+                        }
+                    }
+                });
+            }
+            else
+            {
+                for (int k = 0; k < layersN; k++)
+                {
+                    for (int i = 0; i < weights[k].rows; i++)
+                    {
+                        for (int j = 0; j < weights[k].cols; j++)
+                        {
+                            weights[k][i, j] -= alpha * deltas[k][i] * L[k].x[j];
+                        }
                     }
                 }
             }
         }
 
         // Обучение сети
-        public void Train(Vector[] X, Vector[] Y, double alpha, double eps, int epochs, bool isShuffled)
+        public void Train(Vector[] X, Vector[] Y, double alpha, double eps, int epochs, bool isShuffled, ref double time)
         {
             int epoch = 1; // Номер эпохи
             double error; // Ошибка эпохи
+
+            Stopwatch timer = new Stopwatch();
+            timer.Start();
             do
             {
                 error = 0; // Обнуляем ошибку
-                // Проходимся по всем элементам обучающего множества
+                            // Проходимся по всем элементам обучающего множества
                 for (int i = 0; i < X.Length; i++)
                 {
                     Forward(X[i]); // Прямое распространение сигнала
@@ -151,6 +190,8 @@ namespace NN_Backpropagation.Classes
                 Console.WriteLine("Epoch: {0}, error: {1}", epoch, error); // Выводим в консоль номер эпохи и величину ошибку
                 epoch++;
             } while (epoch <= epochs && error > eps);
+            timer.Stop();
+            time = timer.Elapsed.TotalSeconds;
         }
     }
 }

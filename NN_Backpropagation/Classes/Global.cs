@@ -29,6 +29,7 @@ namespace NN_Backpropagation.Classes
         public static double Eps = 1e-7;                            // Точность
         public static int Epochs = 150;                             // Количество эпох
         public static int IdPatient = 41;                           // Номер пациента
-        public static bool IsShuffled = true;                       // True - если перемешивать вектора во время обучения
+        public static bool IsShuffled = false;                      // True - если перемешивать вектора во время обучения
+        public static bool IsParallel = false;                      // True - если вычислять в параллельном режиме
     }
 }

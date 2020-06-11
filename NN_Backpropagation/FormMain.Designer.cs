@@ -49,6 +49,7 @@
             this.Btn_Train = new System.Windows.Forms.Button();
             this.InfoPanel = new System.Windows.Forms.Panel();
             this.Rtb_Result = new System.Windows.Forms.RichTextBox();
+            this.Check_IsParallel = new System.Windows.Forms.CheckBox();
             this.ControlPanel.SuspendLayout();
             this.GB_Settings.SuspendLayout();
             this.InfoPanel.SuspendLayout();
@@ -108,6 +109,7 @@
             // 
             // GB_Settings
             // 
+            this.GB_Settings.Controls.Add(this.Check_IsParallel);
             this.GB_Settings.Controls.Add(this.TB_Config);
             this.GB_Settings.Controls.Add(this.Label_Config);
             this.GB_Settings.Controls.Add(this.TB_PartTrain);
@@ -280,6 +282,20 @@
             this.Rtb_Result.Text = "";
             this.Rtb_Result.TextChanged += new System.EventHandler(this.Rtb_Result_TextChanged);
             // 
+            // Check_IsParallel
+            // 
+            this.Check_IsParallel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.Check_IsParallel.AutoSize = true;
+            this.Check_IsParallel.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.Check_IsParallel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.Check_IsParallel.Location = new System.Drawing.Point(310, 174);
+            this.Check_IsParallel.Name = "Check_IsParallel";
+            this.Check_IsParallel.Size = new System.Drawing.Size(189, 22);
+            this.Check_IsParallel.TabIndex = 14;
+            this.Check_IsParallel.Text = "Параллельный режим:";
+            this.Check_IsParallel.UseVisualStyleBackColor = true;
+            this.Check_IsParallel.CheckedChanged += new System.EventHandler(this.Check_IsParallel_CheckedChanged);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -323,6 +339,7 @@
         private System.Windows.Forms.TextBox TB_IdPatient;
         private System.Windows.Forms.Label Label_IdPatient;
         private System.Windows.Forms.Button Btn_TestOne;
+        private System.Windows.Forms.CheckBox Check_IsParallel;
     }
 }
 
