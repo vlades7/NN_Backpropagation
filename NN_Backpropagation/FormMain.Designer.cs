@@ -48,6 +48,8 @@
             this.Btn_Train = new System.Windows.Forms.Button();
             this.InfoPanel = new System.Windows.Forms.Panel();
             this.Rtb_Result = new System.Windows.Forms.RichTextBox();
+            this.Label_Method = new System.Windows.Forms.Label();
+            this.CB_Method = new System.Windows.Forms.ComboBox();
             this.ControlPanel.SuspendLayout();
             this.GB_Settings.SuspendLayout();
             this.InfoPanel.SuspendLayout();
@@ -107,6 +109,8 @@
             // 
             // GB_Settings
             // 
+            this.GB_Settings.Controls.Add(this.CB_Method);
+            this.GB_Settings.Controls.Add(this.Label_Method);
             this.GB_Settings.Controls.Add(this.TB_Config);
             this.GB_Settings.Controls.Add(this.Label_Config);
             this.GB_Settings.Controls.Add(this.TB_PartTrain);
@@ -264,6 +268,30 @@
             this.Rtb_Result.Text = "";
             this.Rtb_Result.TextChanged += new System.EventHandler(this.Rtb_Result_TextChanged);
             // 
+            // Label_Method
+            // 
+            this.Label_Method.AutoSize = true;
+            this.Label_Method.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.Label_Method.Location = new System.Drawing.Point(298, 146);
+            this.Label_Method.Name = "Label_Method";
+            this.Label_Method.Size = new System.Drawing.Size(54, 18);
+            this.Label_Method.TabIndex = 15;
+            this.Label_Method.Text = "Метод";
+            // 
+            // CB_Method
+            // 
+            this.CB_Method.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CB_Method.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.CB_Method.FormattingEnabled = true;
+            this.CB_Method.Items.AddRange(new object[] {
+            "RPROP",
+            "Наиск. спуск с моментом"});
+            this.CB_Method.Location = new System.Drawing.Point(340, 167);
+            this.CB_Method.Name = "CB_Method";
+            this.CB_Method.Size = new System.Drawing.Size(159, 26);
+            this.CB_Method.TabIndex = 16;
+            this.CB_Method.SelectedIndexChanged += new System.EventHandler(this.CB_Method_SelectedIndexChanged);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -306,6 +334,8 @@
         private System.Windows.Forms.TextBox TB_IdPatient;
         private System.Windows.Forms.Label Label_IdPatient;
         private System.Windows.Forms.Button Btn_TestOne;
+        private System.Windows.Forms.ComboBox CB_Method;
+        private System.Windows.Forms.Label Label_Method;
     }
 }
 

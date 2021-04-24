@@ -1,7 +1,6 @@
 ﻿using NN_Backpropagation.Classes;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -33,6 +32,15 @@ namespace NN_Backpropagation
             TB_Epochs.Text = Global.Epochs.ToString();
             TB_PartTrain.Text = Global.PartTrain.ToString();
             TB_IdPatient.Text = Global.IdPatient.ToString();
+
+            if (CB_Method.SelectedIndex == 0)
+            {
+                CB_Method.SelectedIndex = 0;
+            }
+            else
+            {
+                CB_Method.SelectedIndex = 1;
+            }
 
             Btn_Test.Enabled = false;
             Btn_TestOne.Enabled = false;
@@ -155,6 +163,7 @@ namespace NN_Backpropagation
                 str += "\tТочность нейросети: " + Global.Eps + Environment.NewLine;
                 str += "\tКоличество эпох: " + Global.Epochs + Environment.NewLine;
                 str += "\tДоля выборки: " + Global.PartTrain + Environment.NewLine;
+                str += "\tМетод обучения: " + (Global.IsRPROP ? "RPROP" : "наискорейший спуск с моментом") + Environment.NewLine;
                 Rtb_Result.AppendText(str);
 
                 await Task.Run(() => network.Train(X_train, Y_train, Global.Alpha, Global.Eps, Global.Epochs, ref TimeTraining));
@@ -421,7 +430,20 @@ namespace NN_Backpropagation
         {
             Rtb_Result.ScrollToCaret();
         }
+
+        private void CB_Method_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (CB_Method.SelectedIndex == 0)
+            {
+                Global.IsRPROP = true;
+            }
+            else
+            {
+                Global.IsRPROP = false;
+            }
+        }
         #endregion
+
 
     }
 }

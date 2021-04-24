@@ -15,7 +15,13 @@ namespace NN_Backpropagation.Classes
 
         public const bool IsHeadDeleted = true;                     // True - если в файле есть строка с заголовками
 
+        public static bool IsRPROP = true;                          // True - метод RPROP, False - наискорейший спуск с моментом
         public static string ConfigLayers = "6";                    // Конфигурация нейронной сети (скрытые слои)
+
+        public static double Mu = 0.9;                              // Коэффициент "Мю" для наискорейшего спуска с моментом
+        public static double nu1 = 1.2;                             // Коэффициент "Ню плюс" для RPROP
+        public static double nu2 = 0.5;                             // Коэффициент "Ню минус" для RPROP
+
         public static double PartTrain = 1.0;                       // Доля обучающей выборки [0, 1]
         public static double Alpha = 0.5;                           // Скорость обучения
         public static double Eps = 1e-7;                            // Точность

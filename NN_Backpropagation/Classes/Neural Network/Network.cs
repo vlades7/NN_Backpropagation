@@ -17,6 +17,7 @@ namespace NN_Backpropagation.Classes
         private Vector[] deltas; // Дельты ошибки на каждом слое
 
         private int layersN; // Число слоёв
+        private double minAlpha; // Минимальный шаг для наискорейшего спуска
 
         // Создание сети из массива количества нейронов в каждом слое
         public Network(int[] sizes)
@@ -24,6 +25,7 @@ namespace NN_Backpropagation.Classes
             Random random = new Random(DateTime.Now.Millisecond); // Создаём генератор случайных чисел
 
             layersN = sizes.Length - 1; // Запоминаем число слоёв
+            minAlpha = 0;
 
             weights = new Matrix[layersN]; // Создаём массив матриц весовых коэффициентов
             L = new LayerT[layersN]; // Создаём массив значений на каждом слое
@@ -114,16 +116,57 @@ namespace NN_Backpropagation.Classes
         }
 
         // Обновление весовых коэффициентов, alpha - скорость обучения
-        void UpdateWeights(double alpha)
+        void UpdateWeights(double initAlpha)
         {
-            for (int k = 0; k < layersN; k++)
+            double alpha = initAlpha;
+            if (minAlpha == 0)
             {
-                for (int i = 0; i < weights[k].rows; i++)
+                minAlpha = alpha;
+            }
+            if (Global.IsRPROP)
+            {
+                for (int k = 0; k < layersN; k++)
                 {
-                    for (int j = 0; j < weights[k].cols; j++)
+                    for (int i = 0; i < weights[k].rows; i++)
                     {
-                        weights[k][i, j] -= alpha * deltas[k][i] * L[k].x[j];
+                        for (int j = 0; j < weights[k].cols; j++)
+                        {
+                            if (deltas[k][i] * L[k].x[j] > 0)
+                            {
+                                alpha += Global.nu1;
+                                weights[k][i, j] -= Global.nu1 * deltas[k][i] * L[k].x[j];
+                            }
+                            else if (deltas[k][i] * L[k].x[j] < 0)
+                            {
+                                alpha += Global.nu2;
+                                weights[k][i, j] -= Global.nu2 * deltas[k][i] * L[k].x[j];
+                            }
+                        }
                     }
+                }
+            }
+            else
+            {
+                for (int k = 0; k < layersN; k++)
+                {
+                    for (int i = 0; i < weights[k].rows; i++)
+                    {
+                        for (int j = 0; j < weights[k].cols; j++)
+                        {
+                            double temp = (deltas[k][i]) / (deltas[k][i] * L[k].x[j]);
+                            if (minAlpha > temp)
+                            {
+                                alpha = temp;
+                            }
+
+                            deltas[k][i] = Global.Mu * deltas[k][i] + minAlpha * deltas[k][i] * L[k].x[j];
+                            weights[k][i, j] = weights[k][i, j] - deltas[k][i];
+                        }
+                    }
+                }
+                if (minAlpha > alpha)
+                {
+                    minAlpha = alpha;
                 }
             }
         }
