@@ -8,20 +8,6 @@ namespace NN_Backpropagation.Classes
     static public class Utilities
     {
         /// <summary>
-        ///   Преобразование строки Дня Рождения в формат DateTime
-        /// </summary>
-        /// <param name = "userString">Строка для преобразования</param>
-        public static DateTime UserStringToDateTime(string userString)
-        {
-            string[] args = userString.Split('.');
-            if (args.Length == 3)
-            {
-                return new DateTime(Convert.ToInt32(args[2]), Convert.ToInt32(args[1]), Convert.ToInt32(args[0]));
-            }
-            return DateTime.MinValue;
-        }
-
-        /// <summary>
         ///   Нормализация одного значения
         /// </summary>
         /// <param name = "value">Значение для нормализации</param>
@@ -188,16 +174,19 @@ namespace NN_Backpropagation.Classes
         /// <param name = "head">True, если имеется заголовок</param>
         /// <param name = "from">Номер позиции, с которой происходит удаление столбцов</param>
         /// <param name = "count">Количество для удаления столбцов</param>
-        public static void FormatData(ref List<List<string>> data, bool head, int from, int count)
+        public static void FormatData(ref List<List<string>> data, bool head, int from = 0, int count = 0)
         {
             if (head)
             {
                 data.RemoveAt(0);
             }
 
-            for (int i = 0; i < data.Count; i++)
+            if (count > 0)
             {
-                data[i].RemoveRange(from, count);
+                for (int i = 0; i < data.Count; i++)
+                {
+                    data[i].RemoveRange(from, count);
+                }
             }
         }
 
@@ -208,31 +197,6 @@ namespace NN_Backpropagation.Classes
         public static List<List<double>> DataStringToDouble(List<List<string>> data) {
             List<List<double>> doubleData = data.Select(x => x.Select(y => double.Parse(y)).ToList()).ToList();
             return doubleData;
-        }
-
-        /// <summary>
-        ///   Перетасовка векторов
-        /// </summary>
-        /// <param name = "x">Массив векторов с входными данными</param>
-        /// <param name = "y">Массив векторов с ожидаемыми данными</param>
-        public static void ShuffleVectors(Vector[] x, Vector[] y)
-        {
-            int j = 0;
-            Random random = new Random(DateTime.Now.Millisecond);
-            Vector buf = null;
-
-            for (int i = x.Length - 1; i >= 1; i--)
-            {
-                j = random.Next(i + 1);
-
-                buf = x[i];
-                x[i] = x[j];
-                x[j] = buf;
-
-                buf = y[i];
-                y[i] = y[j];
-                y[j] = buf;
-            }
         }
 
         /// <summary>

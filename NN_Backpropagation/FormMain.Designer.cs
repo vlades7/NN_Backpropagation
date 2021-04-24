@@ -38,7 +38,6 @@
             this.Label_Config = new System.Windows.Forms.Label();
             this.TB_PartTrain = new System.Windows.Forms.TextBox();
             this.Label_PartTrain = new System.Windows.Forms.Label();
-            this.Check_IsShuffled = new System.Windows.Forms.CheckBox();
             this.TB_Epochs = new System.Windows.Forms.TextBox();
             this.Label_Epochs = new System.Windows.Forms.Label();
             this.TB_Eps = new System.Windows.Forms.TextBox();
@@ -49,7 +48,6 @@
             this.Btn_Train = new System.Windows.Forms.Button();
             this.InfoPanel = new System.Windows.Forms.Panel();
             this.Rtb_Result = new System.Windows.Forms.RichTextBox();
-            this.Check_IsParallel = new System.Windows.Forms.CheckBox();
             this.ControlPanel.SuspendLayout();
             this.GB_Settings.SuspendLayout();
             this.InfoPanel.SuspendLayout();
@@ -93,7 +91,7 @@
             this.Btn_TestOne.Name = "Btn_TestOne";
             this.Btn_TestOne.Size = new System.Drawing.Size(144, 55);
             this.Btn_TestOne.TabIndex = 7;
-            this.Btn_TestOne.Text = "Прогноз";
+            this.Btn_TestOne.Text = "Тест пациента";
             this.Btn_TestOne.UseVisualStyleBackColor = true;
             this.Btn_TestOne.Click += new System.EventHandler(this.Btn_TestOne_Click);
             // 
@@ -109,12 +107,10 @@
             // 
             // GB_Settings
             // 
-            this.GB_Settings.Controls.Add(this.Check_IsParallel);
             this.GB_Settings.Controls.Add(this.TB_Config);
             this.GB_Settings.Controls.Add(this.Label_Config);
             this.GB_Settings.Controls.Add(this.TB_PartTrain);
             this.GB_Settings.Controls.Add(this.Label_PartTrain);
-            this.GB_Settings.Controls.Add(this.Check_IsShuffled);
             this.GB_Settings.Controls.Add(this.TB_Epochs);
             this.GB_Settings.Controls.Add(this.Label_Epochs);
             this.GB_Settings.Controls.Add(this.TB_Eps);
@@ -166,20 +162,6 @@
             this.Label_PartTrain.Size = new System.Drawing.Size(115, 18);
             this.Label_PartTrain.TabIndex = 10;
             this.Label_PartTrain.Text = "Доля выборки:";
-            // 
-            // Check_IsShuffled
-            // 
-            this.Check_IsShuffled.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Check_IsShuffled.AutoSize = true;
-            this.Check_IsShuffled.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.Check_IsShuffled.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Check_IsShuffled.Location = new System.Drawing.Point(301, 146);
-            this.Check_IsShuffled.Name = "Check_IsShuffled";
-            this.Check_IsShuffled.Size = new System.Drawing.Size(198, 22);
-            this.Check_IsShuffled.TabIndex = 9;
-            this.Check_IsShuffled.Text = "Перемешивать вектора:";
-            this.Check_IsShuffled.UseVisualStyleBackColor = true;
-            this.Check_IsShuffled.CheckedChanged += new System.EventHandler(this.Check_IsShuffled_CheckedChanged);
             // 
             // TB_Epochs
             // 
@@ -282,20 +264,6 @@
             this.Rtb_Result.Text = "";
             this.Rtb_Result.TextChanged += new System.EventHandler(this.Rtb_Result_TextChanged);
             // 
-            // Check_IsParallel
-            // 
-            this.Check_IsParallel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.Check_IsParallel.AutoSize = true;
-            this.Check_IsParallel.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.Check_IsParallel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Check_IsParallel.Location = new System.Drawing.Point(310, 174);
-            this.Check_IsParallel.Name = "Check_IsParallel";
-            this.Check_IsParallel.Size = new System.Drawing.Size(189, 22);
-            this.Check_IsParallel.TabIndex = 14;
-            this.Check_IsParallel.Text = "Параллельный режим:";
-            this.Check_IsParallel.UseVisualStyleBackColor = true;
-            this.Check_IsParallel.CheckedChanged += new System.EventHandler(this.Check_IsParallel_CheckedChanged);
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -330,7 +298,6 @@
         private System.Windows.Forms.TextBox TB_Eps;
         private System.Windows.Forms.TextBox TB_Epochs;
         private System.Windows.Forms.Label Label_Epochs;
-        private System.Windows.Forms.CheckBox Check_IsShuffled;
         private System.Windows.Forms.Label Label_PartTrain;
         private System.Windows.Forms.TextBox TB_PartTrain;
         private System.Windows.Forms.Button Btn_Clear;
@@ -339,7 +306,6 @@
         private System.Windows.Forms.TextBox TB_IdPatient;
         private System.Windows.Forms.Label Label_IdPatient;
         private System.Windows.Forms.Button Btn_TestOne;
-        private System.Windows.Forms.CheckBox Check_IsParallel;
     }
 }
 

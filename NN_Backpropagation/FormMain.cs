@@ -15,7 +15,6 @@ namespace NN_Backpropagation
 
         List<List<string>> DataFromFile = new List<List<string>>();    // Данные считанные из файла
         List<List<double>> ConvertedData = new List<List<double>>();   // Данные конвертированные в числа
-        List<FileRR> filesRR = new List<FileRR>();                     // Файлы с RR-интервалами
 
         Vector[] X_train = null;
         Vector[] Y_train = null;
@@ -34,8 +33,6 @@ namespace NN_Backpropagation
             TB_Epochs.Text = Global.Epochs.ToString();
             TB_PartTrain.Text = Global.PartTrain.ToString();
             TB_IdPatient.Text = Global.IdPatient.ToString();
-            Check_IsShuffled.Checked = Global.IsShuffled;
-            Check_IsParallel.Checked = Global.IsParallel;
 
             Btn_Test.Enabled = false;
             Btn_TestOne.Enabled = false;
@@ -56,7 +53,7 @@ namespace NN_Backpropagation
                 return;
             }
 
-            Utilities.FormatData(ref DataFromFile, Global.IsHeadDeleted, Global.NumInfoCols, Global.NumMissCols);
+            Utilities.FormatData(ref DataFromFile, Global.IsHeadDeleted, Global.NumInfoCols);
             ConvertedData = Utilities.DataStringToDouble(DataFromFile);
         }
 
@@ -83,41 +80,6 @@ namespace NN_Backpropagation
             }
 
             TrainSize = (int)(Global.PartTrain * ConvertedData.Count);
-        }
-
-        // Считывание файлов RR-интервалов
-        private void ReadFilesRR()
-        {
-            DirectoryInfo dir = new DirectoryInfo(Global.DirPath);
-            foreach (FileInfo file in dir.GetFiles())
-            {
-                try
-                {
-                    filesRR.Add(new FileRR(file.FullName));
-                }
-                catch { }
-            }
-
-            filesRR.Sort((a, b) => a.Id >= b.Id ? 1 : -1);
-
-            foreach (FileRR f in filesRR)
-            {
-                f.CreateRanges();
-            }
-        }
-
-        // Вставка нормализированных диапазонов вхождений в общие данные
-        private void NormRangesToData()
-        {
-            double[] normRanges = new double[Global.CountRanges];
-            for (int i = 0; i < ConvertedData.Count; i++)
-            {
-                for (int j = 0; j < Global.CountRanges; j++)
-                {
-                    normRanges[j] = Utilities.Normalize(filesRR[i].ranges[j], filesRR[i].MinCount, filesRR[i].MaxCount);
-                }
-                ConvertedData[i].InsertRange(Global.NumInfoCols, normRanges);
-            }
         }
 
         // Создание набора данных для обучения
@@ -193,25 +155,9 @@ namespace NN_Backpropagation
                 str += "\tТочность нейросети: " + Global.Eps + Environment.NewLine;
                 str += "\tКоличество эпох: " + Global.Epochs + Environment.NewLine;
                 str += "\tДоля выборки: " + Global.PartTrain + Environment.NewLine;
-                if (Global.IsShuffled)
-                {
-                    str += "\tПеретасовка векторов выбрана" + Environment.NewLine;
-                }
-                else
-                {
-                    str += "\tПеретасовка векторов не выбрана" + Environment.NewLine;
-                }
-                if (Global.IsParallel)
-                {
-                    str += "\tПараллельный режим" + Environment.NewLine;
-                }
-                else
-                {
-                    str += "\tПоследовательный режим" + Environment.NewLine;
-                }
                 Rtb_Result.AppendText(str);
 
-                await Task.Run(() => network.Train(X_train, Y_train, Global.Alpha, Global.Eps, Global.Epochs, Global.IsShuffled, ref TimeTraining));
+                await Task.Run(() => network.Train(X_train, Y_train, Global.Alpha, Global.Eps, Global.Epochs, ref TimeTraining));
 
                 str = "Обучение завершено! Время выполнения: " + TimeTraining + " сек"+ Environment.NewLine + Environment.NewLine;
                 Rtb_Result.AppendText(str);
@@ -248,12 +194,6 @@ namespace NN_Backpropagation
                 TotalAccuracy /= Global.OutputSize;
 
                 string strOutput = "";
-                strOutput += string.Format("Точность - жизнеспособность: {0}%\n", Math.Round(Accuracy[0], 6) * 100);
-                strOutput += string.Format("Точность - физическое развитие: {0}%\n", Math.Round(Accuracy[1], 6) * 100);
-                strOutput += string.Format("Точность - норма НПР: {0}%\n", Math.Round(Accuracy[2], 6) * 100);
-                strOutput += string.Format("Точность - моторика: {0}%\n", Math.Round(Accuracy[3], 6) * 100);
-                strOutput += string.Format("Точность - речь: {0}%\n", Math.Round(Accuracy[4], 6) * 100);
-                strOutput += string.Format("Точность - моторика и речь: {0}%\n\n", Math.Round(Accuracy[5], 6) * 100);
                 strOutput += string.Format("Общая точность: {0}%\n\n", Math.Round(TotalAccuracy, 6) * 100);
                 Rtb_Result.AppendText(strOutput);
             }
@@ -286,25 +226,6 @@ namespace NN_Backpropagation
                 if (Math.Round(output[0]) == 1)
                 {
                     answers[0] = "Живой";
-                    if (Math.Round(output[1]) == 1)
-                    {
-                        answers[1] = "Норма";
-                    }
-                    else
-                    {
-                        answers[1] = "Задержка";
-                    }
-                    if (Math.Round(output[2]) == 1)
-                    {
-                        answers[2] = "Норма";
-                    }
-                    for (int i = 3; i < Global.OutputSize; i++)
-                    {
-                        if (Math.Round(output[i]) == 1)
-                        {
-                            answers[i] = "Задержка";
-                        }
-                    }
                 }
                 else
                 {
@@ -313,12 +234,7 @@ namespace NN_Backpropagation
 
                 string strOutput = "";
                 strOutput += string.Format("Полученные результаты №{0}:\n", Global.IdPatient);
-                strOutput += string.Format("Жизнеспособность: {0}\n", answers[0]);
-                strOutput += (answers[1] != null) ? string.Format("Физическое развитие: {0}\n", answers[1]) : "";
-                strOutput += (answers[2] != null) ? string.Format("Нервно-психологическое развитие: {0}\n", answers[2]) : "";
-                strOutput += (answers[3] != null) ? string.Format("Моторика: {0}\n", answers[3]) : "";
-                strOutput += (answers[4] != null) ? string.Format("Речь: {0}\n", answers[4]) : "";
-                strOutput += (answers[5] != null) ? string.Format("Моторика и речь: {0}\n", answers[5]) : "";
+                strOutput += string.Format("Результат: {0}\n", answers[0]);
                 strOutput += Environment.NewLine;
                 Rtb_Result.AppendText(strOutput);
             }
@@ -344,8 +260,6 @@ namespace NN_Backpropagation
             }
 
             NormalizeData();
-            ReadFilesRR();
-            NormRangesToData();
             
             CreateTrainSet();
             if (Global.PartTrain != 1)
@@ -501,16 +415,6 @@ namespace NN_Backpropagation
                 TB_IdPatient.Text = "41";
                 Global.IdPatient = int.Parse(TB_IdPatient.Text);
             }
-        }
-
-        private void Check_IsShuffled_CheckedChanged(object sender, EventArgs e)
-        {
-            Global.IsShuffled = Check_IsShuffled.Checked;
-        }
-
-        private void Check_IsParallel_CheckedChanged(object sender, EventArgs e)
-        {
-            Global.IsParallel = Check_IsParallel.Checked;
         }
 
         private void Rtb_Result_TextChanged(object sender, EventArgs e)
